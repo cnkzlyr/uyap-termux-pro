@@ -1,4 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
+# CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
+# CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
+# CKZ-MUHUR/1 J8XNFu9KWmbMJ63/PEQ7zgz2EAzy6Oj9gxiAx4N9wmZwGd7lgbFXALfGc5/6R1XCkz5rYZWCReK5QBFmKQCDDw==
 # Tani: takili her USB cihazin CCID/kart bilgisini toplar, ~/.eimza/tani.txt'ye yazar ve panoya kopyalar.
 #   1) izleyiciyi durdurur   2) okuyucuyu (ArkSigner vb.) takili tutun   3) bash ~/eimza/eimza_tani.sh
 DIR="$(cd "$(dirname "$0")" && pwd)"

@@ -1,10 +1,14 @@
 #!/data/data/com.termux/files/usr/bin/bash
+# CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
+# CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
+# CKZ-MUHUR/1 e0UDflDeeaEhgbfb3HuMZmWetMSj3lxiROfTpDmwKGUKlGM72Zsaw9L6nweK8I19iKJ+ATmewfC23idpQpGBCg==
 # Adalet E-Imza (https://eimza.adalet.gov.tr) uygulamasini Termux'a kurar.
 # Resmi Linux .deb paketinin icindeki platformdan bagimsiz JAR'i cikarir (paketin x86 Java'si KULLANILMAZ;
 # uygulama Java 21 ister, Termux'un openjdk-21'i kullanilir).
 #   bash ~/eimza/adalet_kur.sh                      -> Download klasorunde adalet-eimza-tray*.deb arar
 #   bash ~/eimza/adalet_kur.sh /yol/adalet-eimza-tray_1_0_13_amd64.deb
 DIR="$(cd "$(dirname "$0")" && pwd)"
+[ -f "$DIR/marka.sh" ] && . "$DIR/marka.sh"
 APPDIR="$DIR/adalet"
 mkdir -p "$APPDIR"
 PREFIX="${PREFIX:-/data/data/com.termux/files/usr}"

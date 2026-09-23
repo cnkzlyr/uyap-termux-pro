@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
+# CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
+# CKZ-MUHUR/1 50a9bN0XZS2BpYjlkblR/oUXwAOfXazCHuIlgwst/+x1otbJZbIsc2BcdxwIwRlfcelZMnqw+1p9sZcjP4PlBQ==
 """
 eimza_izle.py - USB okuyucu takilinca koprusunu kendiliginden baslatir; cikarilip takilinca yeniden baslatir.
 

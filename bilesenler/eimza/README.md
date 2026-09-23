@@ -1,3 +1,6 @@
+<!-- CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır. -->
+<!-- CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt -->
+<!-- CKZ-MUHUR/1 gjvq09nLFp/Hy8Y+5UVZBlj5X9Q6Y1kTCV1Gemk87bAYHep1UdynaKMDhQXKEts4f+aORpZpAm8pG4J+kFyzAw== -->
 # UYAP e-imza + Adalet E-İmza + UYAP Editör (Termux native / XFCE)
 
 ## Tek komutla kurulum

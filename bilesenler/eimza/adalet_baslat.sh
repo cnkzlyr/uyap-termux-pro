@@ -1,8 +1,12 @@
 #!/data/data/com.termux/files/usr/bin/bash
+# CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
+# CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
+# CKZ-MUHUR/1 TzpOjZ9Nv4u/TMRcQbtrLUL8BfJ09PncN3Cp8QLKRaJvAWt4+7LMhBbNWCJ42ytVsihlgWFRcQ3dNItFeCQtDA==
 # Adalet E-Imza uygulamasini (127.0.0.1:5975) baslatir/durdurur. Kart erisimi e-imza koprusu uzerinden yapilir.
 #   bash ~/eimza/adalet_baslat.sh [start|stop|durum|restart] [--sessiz] [--ekran]
 # --ekran: uygulama gorunmez (Xvfb) ekranda calisiyorsa ve gercek X11 ekrani (XFCE) acildiysa oraya tasir.
 DIR="$(cd "$(dirname "$0")" && pwd)"
+[ -f "$DIR/marka.sh" ] && . "$DIR/marka.sh"
 STATE="${EIMZA_DIR:-$HOME/.eimza}"
 APPDIR="$DIR/adalet"
 JAR="$APPDIR/eimza-tray.jar"
@@ -22,7 +26,7 @@ for a in "$@"; do
     --ekran) EKRAN=1 ;;
   esac
 done
-say() { [ "$SESSIZ" = "1" ] || echo "$@"; }
+say() { [ "$SESSIZ" = "1" ] || echo "$@" >&2; }
 
 pid_alive() { [ -n "$1" ] && kill -0 "$1" 2>/dev/null; }
 tray_pid() { [ -f "$PIDF" ] && p=$(cat "$PIDF") && pid_alive "$p" && echo "$p"; }
@@ -100,6 +104,7 @@ DSP=$(choose_display) || { say "X ekrani yok: XFCE/Termux:X11'i acin ya da 'pkg 
 [ -f "$LOG" ] && [ "$(wc -c < "$LOG")" -gt 5000000 ] && : > "$LOG"
 TMPD="${TMPDIR:-$PREFIX/tmp}"
 
+type ckz_satir >/dev/null 2>&1 && [ "$SESSIZ" != "1" ] && ckz_satir
 say "Adalet E-Imza baslatiliyor (ekran $DSP) ..."
 DISPLAY="$DSP" \
 EIMZA_DIR="$STATE" \

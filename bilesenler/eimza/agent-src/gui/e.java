@@ -1,49 +1,29 @@
+// CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
+// CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
+// CKZ-MUHUR/1 dcNtDIqc9z5OXjRgmTyf8qInmR0MSdgJmZjDRuu9DRTULNH9v3xB4jJ+DmknGpOAKnNwVSOYziraCVzyo4ihBg==
 package tr.gov.adalet.service.framework.adalet.eimza.eimzatray.gui;
 
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.border.EmptyBorder;
 
 /**
- * Adalet E-Imza uygulamasinin "E-imza Sifrenizi Giriniz" penceresinin yerine gecer (yalnizca web sayfasi PIN'i
- * gondermediginde cagrilir). Termux'ta Swing penceresi Chrome'un arkasinda/gorunmez X ekraninda kaldigi icin
- * once Android'in kendi PIN penceresi (termux-dialog) kullanilir; basarisiz olursa Swing penceresi acilir.
- * EIMZA_PIN_MODE=swing  -> her zaman Swing;  EIMZA_PIN_MODE=android -> yalnizca Android penceresi.
- * PIN hicbir yere yazilmaz/loglanmaz.
+ * UYAP-Termux: web sayfasi PIN gondermediginde PIN'i Android'in kendi penceresinden (termux-dialog) alir.
+ * Termux'ta uygulamanin masaustu penceresi Chrome'un arkasinda kaldigi icin bu gereklidir.
+ * PIN hicbir yere yazilmaz/loglanmaz. termux-dialog kullanilamazsa null doner (uygulama "PIN girilmedi" der).
  *
- * NOT: Sinif adi uygulamanin (karistirilmis) orijinal sinifiyla ayni olmali; uygulama surumu degisirse
- * bu ad degisebilir - o zaman bu sinif sessizce devre disi kalir ve uygulama kendi penceresini kullanir.
+ * (c) 2026 Av. Can KIZILYAR - Tum haklari saklidir. Bkz. LICENSE.txt
  */
 public class e {
     private static final int TIMEOUT_SECONDS = 120;
 
     public static String a(Component parent) {
-        String mode = System.getenv("EIMZA_PIN_MODE");
-        if (mode == null) mode = "auto";
-        if (!"swing".equalsIgnoreCase(mode)) {
-            String[] r = android();
-            if (r != null) return r[0];            // r[0] null olabilir = kullanici iptal etti
-            if ("android".equalsIgnoreCase(mode)) return null;
-        }
-        return swing(parent);
-    }
-
-    /** @return null = termux-dialog kullanilamadi; {pin} = sonuc (pin null ise iptal) */
-    private static String[] android() {
         try {
             ProcessBuilder pb = new ProcessBuilder("termux-dialog", "text", "-t", "E-imza sifresi (PIN)", "-i", "PIN", "-p");
-            pb.redirectErrorStream(false);
             Process p = pb.start();
             p.getOutputStream().close();
             ByteArrayOutputStream bo = new ByteArrayOutputStream();
@@ -63,12 +43,11 @@ public class e {
             t.join(1000);
             String out = new String(bo.toByteArray(), StandardCharsets.UTF_8);
             Matcher mc = Pattern.compile("\"code\"\\s*:\\s*(-?\\d+)").matcher(out);
-            if (!mc.find()) return null;
-            if (Integer.parseInt(mc.group(1)) != -1) return new String[]{null};     // iptal
+            if (!mc.find() || Integer.parseInt(mc.group(1)) != -1) return null;
             Matcher mt = Pattern.compile("\"text\"\\s*:\\s*\"((?:[^\"\\\\]|\\\\.)*)\"").matcher(out);
-            if (!mt.find()) return new String[]{null};
+            if (!mt.find()) return null;
             String s = unescape(mt.group(1));
-            return new String[]{s.isEmpty() ? null : s};
+            return s.isEmpty() ? null : s;
         } catch (Exception ex) {
             return null;
         }
@@ -91,23 +70,5 @@ public class e {
             }
         }
         return sb.toString();
-    }
-
-    private static String swing(Component parent) {
-        JPasswordField pf = new JPasswordField(10);
-        JPanel panel = new JPanel(new FlowLayout());
-        panel.setBorder(new EmptyBorder(30, 10, 10, 10));
-        panel.add(new JLabel("E-imza \u015eifrenizi Giriniz:"));
-        panel.add(pf);
-        JOptionPane op = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
-        JDialog d = op.createDialog(parent, "E-imza \u015eifre Giri\u015fi");
-        d.setAlwaysOnTop(true);
-        d.setModal(true);
-        d.toFront();
-        pf.requestFocusInWindow();
-        d.setVisible(true);
-        Object v = op.getValue();
-        if (v instanceof Integer && (Integer) v == JOptionPane.OK_OPTION) return new String(pf.getPassword());
-        return null;
     }
 }

@@ -1,6 +1,12 @@
+# CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
+# CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
+# CKZ-MUHUR/1 QBzPBWNyO1+UOI+i4L+Qga/OrwZYKflpjncwC0OBFt35Sgiuxd7bt+OqM9EF98tQ8WqdcNW09xYLIAQCx+EPDg==
 import os
 import subprocess
 import sys
+
+CKZ_KIMLIK = "[UYAP-Termux 1.0] \u00a9 2026 Av. Can KIZILYAR \u2014 T\u00fcm haklar\u0131 sakl\u0131d\u0131r." + "⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠"
+print(CKZ_KIMLIK)
 import threading
 import xml.etree.ElementTree as ET
 import zipfile

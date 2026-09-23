@@ -1,9 +1,13 @@
 #!/data/data/com.termux/files/usr/bin/bash
+# CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
+# CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
+# CKZ-MUHUR/1 9TfKf3sOQKMSyvvI/CZJg97gfGIzgaxTrTxL74NR2DuJjhLI/miMTB6JAnEcSez1n9WVI2jedTs6cU6mSiv0BA==
 # E-imza okuyucu izleyicisini (ve koprusunu) arka planda baslatir. Okuyucu cikarilip takilinca kendiliginden baglanir.
 #   bash ~/eimza/eimza_baslat.sh        -> baslat
 #   bash ~/eimza/eimza_baslat.sh stop   -> durdur (karti da kapatir)
 #   bash ~/eimza/eimza_baslat.sh ensure -> calismiyorsa baslat, calisiyorsa dokunma (otomatik baslatma icin)
 DIR="$(cd "$(dirname "$0")" && pwd)"
+[ -f "$DIR/marka.sh" ] && . "$DIR/marka.sh"
 STATE="${EIMZA_DIR:-$HOME/.eimza}"
 mkdir -p "$STATE"; chmod 700 "$STATE"
 chmod +x "$DIR/bridge_run.sh" "$DIR/tani_run.sh" "$DIR/ccid_bridge.py" "$DIR/eimza_izle.py" 2>/dev/null
@@ -38,6 +42,7 @@ nohup python3 "$DIR/eimza_izle.py" >> "$STATE/izle.log" 2>&1 &
 disown 2>/dev/null
 
 [ "$ENSURE" = "1" ] && exit 0
+type ckz_satir >/dev/null 2>&1 && ckz_satir
 echo "E-imza izleyicisi basladi. Okuyucuyu takin; Android izin sorarsa 'Izin ver'"
 echo "(mumkunse 'varsayilan olarak kullan' kutusunu isaretleyin). Cikarip takarsaniz kendiliginden baglanir."
 for i in $(seq 1 60); do

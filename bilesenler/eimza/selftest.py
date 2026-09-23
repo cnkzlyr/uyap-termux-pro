@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
+# CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
+# CKZ-MUHUR/1 kFuZ1U39whv3/clXPvMvVisfMU1g6j5IRvpvwTMXq2q/HRHMcwQER7tC99k2RpRYopeW0gVx3gDCoiRSHGHyDg==
 """
 selftest.py - Donanim olmadan kopruyu sinar: sahte CCID okuyucu + sahte T=1 kart.
 Kullanim:  python3 selftest.py        (Termux'ta da, PC'de de calisir)

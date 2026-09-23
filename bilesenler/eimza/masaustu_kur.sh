@@ -1,7 +1,11 @@
 #!/data/data/com.termux/files/usr/bin/bash
+# CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
+# CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
+# CKZ-MUHUR/1 Gpys+CMxsl7jxP3DwrF1pA0WQ7uCRhkbr2pDkXTY8PZCDJIZZSzCFpXEiujw3FtmkSP5m3dFJcd+DcGYCud8Cg==
 # UYAP Editor'u XFCE'de "uygulama" yapar: baslat menusu + masaustu simgesi + .udf/.usf dosyalarina cift tikla.
 # Cift tiklanan dosya editorde ACILIR (bos pencere acilmaz); editor zaten aciksa belge onda acilir.
 DIR="$(cd "$(dirname "$0")" && pwd)"
+[ -f "$DIR/marka.sh" ] && . "$DIR/marka.sh"
 HOME_DIR="${HOME}"
 UE="${UYAP_UE_PY:-$HOME_DIR/ue.py}"
 BIN="$HOME_DIR/.local/bin"
@@ -33,6 +37,16 @@ WRAP
 chmod +x "$BIN/uyap-editor"
 [ -d "${PREFIX:-/nonexistent}/bin" ] && ln -sf "$BIN/uyap-editor" "$PREFIX/bin/uyap-editor" 2>/dev/null
 
+# ---- uyap-hakkinda: telif bildirimi + muhur dogrulamasi ----
+cat > "$BIN/uyap-hakkinda" <<HAK
+#!/data/data/com.termux/files/usr/bin/bash
+. "$DIR/marka.sh" 2>/dev/null && ckz_banner
+if [ -f "$DIR/../.ckz-kurulum/tools/dogrula.py" ]; then python3 "$DIR/../.ckz-kurulum/tools/dogrula.py" "$DIR/../.ckz-kurulum" --kurulu; else echo "(muhur dogrulamasi icin kurulum klasoru bulunamadi)"; fi
+[ -f "\$HOME/.ckz-durum/ONAYSIZ" ] && echo "!!! ONAYSIZ KURULUM: \$(cat "\$HOME/.ckz-durum/ONAYSIZ")"
+[ -f "\$HOME/.ckz-durum/KURULUM.txt" ] && cat "\$HOME/.ckz-durum/KURULUM.txt"
+HAK
+chmod +x "$BIN/uyap-hakkinda"
+
 # ---- MIME: .udf ve .usf ----
 cat > "$MIMEDIR/packages/uyap-belge.xml" <<'XML'
 <?xml version="1.0" encoding="UTF-8"?>
@@ -62,7 +76,7 @@ Version=1.0
 Type=Application
 Name=UYAP Editör
 GenericName=UYAP Doküman Editörü
-Comment=UDF / USF belgelerini aç, düzenle ve e-imzala
+Comment=UDF / USF belgelerini aç, düzenle ve e-imzala — © Av. Can KIZILYAR (resmî değildir)
 Exec=$BIN/uyap-editor %F
 Icon=$ICONREF
 Terminal=false
@@ -108,4 +122,5 @@ if [ -d "$DESK" ] || mkdir -p "$DESK" 2>/dev/null; then
   cp "$DESKTOP" "$DESK/UYAP Editör.desktop"; chmod +x "$DESK/UYAP Editör.desktop"
   command -v gio >/dev/null 2>&1 && gio set "$DESK/UYAP Editör.desktop" metadata::trusted true 2>/dev/null
 fi
+type ckz_satir >/dev/null 2>&1 && ckz_satir
 echo "UYAP Editör uygulama olarak kuruldu: menü + masaüstü simgesi + .udf/.usf çift tıklama."
