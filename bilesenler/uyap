@@ -10,7 +10,8 @@
 #   uyap adalet baslat|durdur|durum   Adalet E-İmza yerel servisi (127.0.0.1:5975)
 #   uyap yedek [etiket]  gizli verileri dışlayan tam yedek (bkz. yedek_al.sh --help)
 #   uyap yazitipi        PDF'te birebir Times New Roman için Microsoft çekirdek yazı tiplerini kurar
-#   uyap kur-editor ZIP  resmî uyapeditor_*_amd64.zip'ten jar'ları kurar/günceller
+#   uyap kur-editor [ZIP] UYAP Editör'ü kurar/günceller (ZIP verilmezse uyap.gov.tr'den güncelini indirir)
+#   uyap guncelle        GitHub'daki son sürümü alır ve yeniden kurar
 #   uyap gunluk          son günlük satırları     uyap tani   sorun giderme raporu (panoya kopyalar)
 #   uyap hakkinda        telif ve mühür doğrulaması
 set -u
@@ -18,6 +19,11 @@ case "${LC_ALL:-${LANG:-}}" in *UTF-8*|*utf8*) ;; *) export LC_ALL=C.UTF-8 ;; es
 PREFIX="${PREFIX:-/data/data/com.termux/files/usr}"
 EIMZA="$HOME/eimza"
 KOK="$HOME/.ckz-kurulum"
+# Kurulumun yapıldığı git kopyası (git pull ile güncellenen); yoksa kurulum anındaki kopya
+KAYNAK="$(cat "${XDG_CONFIG_HOME:-$HOME/.config}/uyap-termux/kaynak_dizini" 2>/dev/null)"
+if [ -z "$KAYNAK" ] || [ ! -f "$KAYNAK/kur.sh" ]; then
+  if [ -f "$HOME/uyap-termux-pro/kur.sh" ]; then KAYNAK="$HOME/uyap-termux-pro"; else KAYNAK="$KOK"; fi
+fi
 STATE="${EIMZA_DIR:-$HOME/.eimza}"
 AYAR="${XDG_CONFIG_HOME:-$HOME/.config}/uyap-termux/ayarlar.ini"
 UE="$HOME/ue.py"
@@ -57,7 +63,7 @@ durum() {
     else yok "Adalet E-İmza" "kapalı  (uyap adalet baslat)"; fi
   else ara "Adalet E-İmza" "kurulu değil  (bash ~/eimza/adalet_kur.sh)"; fi
   if ls "$HOME"/jars/editor_lib*.jar >/dev/null 2>&1; then ok "Editör jar'ları" "$(ls "$HOME"/jars/*.jar 2>/dev/null | wc -l) jar"
-  else yok "Editör jar'ları" "yok  (uyap kur-editor ZIP)"; fi
+  else yok "Editör jar'ları" "yok  (uyap kur-editor)"; fi
   j="$(python3 "$UE" --tani 2>/dev/null | sed -n 's/^Seçilen Java: //p')"
   if [ -n "$j" ] && [ "${j#None}" = "$j" ]; then ok "Java" "$j"; else yok "Java" "bulunamadı  (pkg install openjdk-21)"; fi
   if ls "$HOME"/.fonts/*/[Tt]imes*.[Tt][Tt][Ff] >/dev/null 2>&1 || ls "$HOME"/.fonts/[Tt]imes*.[Tt][Tt][Ff] >/dev/null 2>&1; then ok "Times New Roman" "kurulu"
@@ -152,8 +158,23 @@ yazitipi() {
 }
 
 kur_editor() {
-  [ -n "${1:-}" ] || { echo "Kullanım: uyap kur-editor /sdcard/Download/uyapeditor_X.Y.Z_amd64.zip"; return 2; }
-  bash "$KOK/kur.sh" --editor-zip "$1" --paket-atla --kabul --yalniz-editor
+  # Argümansız: uyap.gov.tr'deki güncel Pardus/Debian paketini indirir. Zip verilirse onu kullanır.
+  # Mevcut jar'lar varsa da yeniden kurar (güncelleme amaçlı çağrılır).
+  local zip="${1:-}"
+  if [ -n "$zip" ] && [ ! -f "$zip" ]; then echo "Dosya bulunamadı: $zip"; return 2; fi
+  if [ -z "$zip" ]; then
+    local t; t="$(mktemp -d)"
+    echo "Güncel UYAP Editör uyap.gov.tr'den indiriliyor ..."
+    local url
+    url="$(curl -fsSL --max-time 40 https://uyap.gov.tr/UYAP-Editor 2>/dev/null \
+           | grep -oE '(https?:)?//rayp\.adalet\.gov\.tr/[A-Za-z0-9_./-]*uyapeditor_[0-9.]+_amd64\.zip' \
+           | sed -E 's#^(https?:)?//#https://#' | sort -t_ -k2 -V | tail -1)"
+    [ -n "$url" ] || { echo "Resmî sayfada indirme bağlantısı bulunamadı. Zip'i Download'a indirip: uyap kur-editor /sdcard/Download/uyapeditor_*_amd64.zip"; rm -rf "$t"; return 1; }
+    echo "  $url"
+    curl -fL --progress-bar --max-time 1200 -o "$t/$(basename "$url")" "$url" || { echo "İndirilemedi."; rm -rf "$t"; return 1; }
+    zip="$t/$(basename "$url")"
+  fi
+  bash "$KAYNAK/kur.sh" --editor-zip "$zip" --paket-atla --kabul --yalniz-editor
 }
 
 gunluk() {
@@ -212,6 +233,16 @@ menu() {
   done
 }
 
+guncelle() {
+  # GitHub'daki son sürümü alır ve bileşenleri yeniden kurar (paket kurmaz, indirilmiş dosyalara dokunmaz)
+  if [ -d "$KAYNAK/.git" ]; then
+    git -C "$KAYNAK" pull --ff-only || { echo "git pull başarısız (yerel değişiklik var mı?): git -C $KAYNAK status"; return 1; }
+  else
+    echo "Kaynak bir git kopyası değil ($KAYNAK); yalnızca yeniden kuruluyor."
+  fi
+  bash "$KAYNAK/kur.sh" --paket-atla --kabul --yine-de
+}
+
 panel() { exec env DISPLAY="${DISPLAY:-:0}" python3 "$UE" --panel; }
 
 komut="${1:-menu}"; [ $# -gt 0 ] && shift
@@ -240,6 +271,7 @@ case "$komut" in
   yedek) exec bash "$HOME/yedek_al.sh" "$@" ;;
   yazitipi|yazitipleri) yazitipi ;;
   kur-editor) kur_editor "$@" ;;
+  guncelle|güncelle) guncelle ;;
   gunluk|günlük) gunluk ;;
   tani|tanı) tani ;;
   hakkinda|hakkında) exec "$HOME/.local/bin/uyap-hakkinda" ;;

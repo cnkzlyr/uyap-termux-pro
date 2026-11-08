@@ -215,6 +215,9 @@ if [ "$DENEME" != "1" ]; then
   if python3 "$HOME/ue.py" --derle >/dev/null 2>&1; then iyi "editor baslaticisi derlendi"
   else fail "editor baslaticisi derlenemedi: python3 ~/ue.py --derle"; fi
   rm -rf "$HOME/.ckz-kurulum"; mkdir -p "$HOME/.ckz-kurulum"; cp -a "$KOK/." "$HOME/.ckz-kurulum/"
+  # 'uyap' komutu, git pull ile güncellenen bu kopyadaki kur.sh'i kullansın
+  mkdir -p "${XDG_CONFIG_HOME:-$HOME/.config}/uyap-termux"
+  [ -d "$KOK/.git" ] && printf '%s\n' "$KOK" > "${XDG_CONFIG_HOME:-$HOME/.config}/uyap-termux/kaynak_dizini"
   mkdir -p "$HOME/.ckz-durum"; rm -f "$HOME/.ckz-durum/ONAYSIZ"
   [ "$ONAYSIZ" = "1" ] && echo "ONAYSIZ kurulum: yazar muhru dogrulanamadi ($(date '+%F %T'))" > "$HOME/.ckz-durum/ONAYSIZ"
   { ckz_satir; echo "kurulum: $(date '+%F %T')  surum: $CKZ_SURUM"; } > "$HOME/.ckz-durum/KURULUM.txt"
