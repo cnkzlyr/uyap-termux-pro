@@ -64,7 +64,26 @@ fi
 
 # ---------------------------------------------------------------- 2) temel paketler + muhur
 adim 2 "Temel paketler ve mühür doğrulaması"
-if [ "$PAKETATLA" != "1" ]; then run pkg update -y; run pkg install -y python unzip zip curl tar dpkg || fail "temel paketler kurulamadi"; fi
+# Yeni kurulmus Termux'ta paketlerin cogu eskidir; yalnizca birkac paket kurmak (or. python) libcurl'u yukseltip
+# openssl'i eski birakabilir ve curl "cannot locate symbol SSL_..." ile bozulur. Bu yuzden ONCE tam yukseltme.
+tam_yukselt() {
+  echo "   Tüm Termux paketleri güncelleniyor (yarım güncelleme curl/pkg'yi bozar) ..."
+  run pkg update -y || true
+  run env DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::=--force-confdef \
+      -o Dpkg::Options::=--force-confold full-upgrade
+}
+curl_saglam() { curl --version >/dev/null 2>&1; }
+if [ "$PAKETATLA" != "1" ]; then
+  tam_yukselt || fail "paket guncellemesi tamamlanamadi (elle: yes | pkg upgrade)"
+  run env DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::=--force-confold \
+      install python unzip zip curl tar dpkg || fail "temel paketler kurulamadi"
+  if [ "$DENEME" != "1" ] && ! curl_saglam; then
+    echo "   curl bozuk (kütüphane uyumsuzluğu); onarılıyor ..."
+    run env DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::=--force-confold install --reinstall openssl libcurl curl || true
+    tam_yukselt || true
+    curl_saglam || { echo "  ${R_K}✖${R_N} curl hâlâ çalışmıyor. Önce elle:  yes | pkg upgrade   sonra kur.sh'i yeniden çalıştırın."; exit 4; }
+  fi
+fi
 command -v python3 >/dev/null 2>&1 || { echo "python3 yok."; [ "$DENEME" = "1" ] || exit 1; }
 if [ "$YALNIZ_EDITOR" = "1" ]; then :; elif command -v python3 >/dev/null 2>&1; then
   pin=(); [ -n "$PARMAK" ] && pin=(--pub-parmak "$PARMAK")
@@ -108,6 +127,18 @@ if [ "$PAKETATLA" != "1" ]; then
     dpkg -s "$p" >/dev/null 2>&1 && continue
     if pkg install -y "$p" >/dev/null 2>&1; then iyi "$p"; else fail "paket kurulamadi: $p"; fi
   done
+  KRITIK_EKSIK=""
+  for p in python openjdk-21 termux-x11-nightly; do
+    [ "$DENEME" = "1" ] && break
+    dpkg -s "$p" >/dev/null 2>&1 || KRITIK_EKSIK="$KRITIK_EKSIK $p"
+  done
+  if [ -n "$KRITIK_EKSIK" ]; then
+    echo
+    echo "  ${R_K}✖ Kritik paketler kurulamadı:${R_N}$KRITIK_EKSIK"
+    echo "    Muhtemel nedenler: yarım kalmış güncelleme ya da erişilemeyen yansı (mirror)."
+    echo "    Çözüm:  yes | pkg upgrade   (gerekirse: termux-change-repo)   sonra:  bash $KOK/kur.sh --yine-de"
+    exit 5
+  fi
   for p in $ISTEGE_BAGLI; do
     [ "$DENEME" = "1" ] && { echo "[deneme] pkg install -y $p (istege bagli)"; continue; }
     dpkg -s "$p" >/dev/null 2>&1 && continue
