@@ -9,6 +9,8 @@
   python3 ue.py --oku belge.udf              belgenin düz metnini panoya kopyalar
   python3 ue.py --doc belge.udf              belgeyi Word'ün açabildiği .doc (HTML) olarak dışa aktarır
   python3 ue.py --tani                       Java/jar/ayar/e-imza durumunu yazar (sorun giderme)
+  python3 ue.py --panel                      Kontrol Merkezi (durum + ayarlar penceresi)
+  python3 ue.py --derle                      Java bileşenlerini derler ve çıkar (kurulum doğrulaması)
   python3 ue.py --surum
 
 Ayarlar: ~/.config/uyap-termux/ayarlar.ini  (yoksa varsayılanlarla oluşturulur; 'uyap ayarlar' ile düzenlenir)
@@ -525,6 +527,21 @@ def tani(ayarlar):
     return 0
 
 
+def kontrol_merkezi(ayarlar):
+    java, java_surum = java_bul(ayarlar["java"]["yol"].strip())
+    if not java:
+        print("[KRİTİK HATA] Java bulunamadı (pkg install openjdk-21).")
+        return 3
+    flatlaf_hazirla()
+    jars = jar_listesi()
+    hazir, _ = baslaticiyi_derle(java, os.pathsep.join(jars), evet(ayarlar["eimza"]["aktif"]) and os.name != "nt")
+    if not hazir:
+        return 4
+    flatlaf = [j for j in jars if os.path.basename(j) == "flatlaf.jar"]
+    return subprocess.call([java, "-Xmx256M", "-XX:+UseSerialGC", "-Dawt.useSystemAAFontSettings=on", "-Dsun.java2d.uiScale=1",
+                            "-cp", os.pathsep.join([DERLEME_DIR] + flatlaf), "uyaptermux.KontrolMerkezi"])
+
+
 def main(argv):
     print(CKZ_KIMLIK)
     ayarlar = ayarlari_yukle()
@@ -536,6 +553,17 @@ def main(argv):
         return 0
     if argv and argv[0] == "--tani":
         return tani(ayarlar)
+    if argv and argv[0] == "--derle":
+        java, _ = java_bul(ayarlar["java"]["yol"].strip())
+        if not java:
+            print("[HATA] Java bulunamadı.")
+            return 3
+        flatlaf_hazirla()
+        hazir, eimza_hazir = baslaticiyi_derle(java, os.pathsep.join(jar_listesi()), evet(ayarlar["eimza"]["aktif"]))
+        print("başlatıcı: %s, e-imza sağlayıcısı: %s" % ("hazır" if hazir else "HATA", "hazır" if eimza_hazir else "yok"))
+        return 0 if hazir else 4
+    if argv and argv[0] == "--panel":
+        return kontrol_merkezi(ayarlar)
     if len(argv) > 1 and argv[0] == "--oku":
         return udf_oku_ve_kopyala(argv[1])
     if len(argv) > 1 and argv[0] == "--doc":

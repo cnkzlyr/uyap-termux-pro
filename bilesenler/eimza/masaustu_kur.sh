@@ -12,7 +12,6 @@ BIN="$HOME_DIR/.local/bin"
 APPS="${XDG_DATA_HOME:-$HOME_DIR/.local/share}/applications"
 MIMEDIR="${XDG_DATA_HOME:-$HOME_DIR/.local/share}/mime"
 ICONDIR="${XDG_DATA_HOME:-$HOME_DIR/.local/share}/icons/hicolor/256x256/apps"
-STATE="${EIMZA_DIR:-$HOME_DIR/.eimza}"
 DESK="${XDG_DESKTOP_DIR:-$HOME_DIR/Desktop}"
 [ -f "$UE" ] || { echo "ue.py bulunamadi: $UE"; exit 1; }
 mkdir -p "$BIN" "$APPS" "$MIMEDIR/packages" "$ICONDIR" "$HOME_DIR/.uyap-editor"
@@ -36,6 +35,13 @@ exec python3 "$UE" "\$@" >> "$HOME_DIR/.uyap-editor/editor.log" 2>&1
 WRAP
 chmod +x "$BIN/uyap-editor"
 [ -d "${PREFIX:-/nonexistent}/bin" ] && ln -sf "$BIN/uyap-editor" "$PREFIX/bin/uyap-editor" 2>/dev/null
+
+# ---- uyap komutu (menü, durum, ayarlar, panel ...) ----
+if [ -f "$DIR/../uyap" ] || [ -f "$HOME_DIR/.ckz-kurulum/bilesenler/uyap" ]; then
+  src="$DIR/../uyap"; [ -f "$src" ] || src="$HOME_DIR/.ckz-kurulum/bilesenler/uyap"
+  cp -f "$src" "$BIN/uyap" && chmod +x "$BIN/uyap"
+  [ -d "${PREFIX:-/nonexistent}/bin" ] && ln -sf "$BIN/uyap" "$PREFIX/bin/uyap" 2>/dev/null
+fi
 
 # ---- uyap-hakkinda: telif bildirimi + muhur dogrulamasi ----
 cat > "$BIN/uyap-hakkinda" <<HAK
@@ -83,10 +89,59 @@ Terminal=false
 Categories=Office;WordProcessor;
 MimeType=application/x-uyap-udf;application/x-uyap-usf;
 StartupNotify=false
+StartupWMClass=uyap-editor
 Keywords=uyap;udf;usf;editör;e-imza;
+Actions=yeni;panel;
+
+[Desktop Action yeni]
+Name=Yeni belge
+Exec=$BIN/uyap-editor
+
+[Desktop Action panel]
+Name=Kontrol Merkezi
+Exec=$BIN/uyap panel
 EOT
 chmod +x "$DESKTOP"
 command -v update-desktop-database >/dev/null 2>&1 && update-desktop-database "$APPS" >/dev/null 2>&1
+
+# ---- Kontrol Merkezi ----
+cat > "$APPS/uyap-kontrol.desktop" <<EOT
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=UYAP Kontrol Merkezi
+Comment=Editör, e-imza okuyucu ve Adalet E-İmza durumu; ayarlar
+Exec=$BIN/uyap panel
+Icon=$ICONREF
+Terminal=false
+Categories=Office;Settings;
+StartupWMClass=uyaptermux-KontrolMerkezi
+EOT
+chmod +x "$APPS/uyap-kontrol.desktop"
+
+# ---- fluxbox menusu (hafif masaustu) ----
+if [ -d "$HOME_DIR/.fluxbox" ] || command -v fluxbox >/dev/null 2>&1; then
+  mkdir -p "$HOME_DIR/.fluxbox"
+  cat > "$HOME_DIR/.fluxbox/menu" <<EOT
+[begin] (UYAP-Termux)
+[encoding] {UTF-8}
+  [exec] (UYAP Editör) {$BIN/uyap-editor}
+  [exec] (Kontrol Merkezi) {$BIN/uyap panel}
+  [exec] (Adalet E-İmza yeniden başlat) {bash $DIR/adalet_baslat.sh restart --ekran}
+  [separator]
+  [exec] (Terminal) {xterm}
+  [exec] (Dosyalar) {thunar}
+  [separator]
+  [submenu] (Fluxbox)
+    [config] (Ayarlar)
+    [reconfig] (Yeniden yükle)
+    [restart] (Yeniden başlat)
+    [exit] (Çıkış)
+  [end]
+[endencoding]
+[end]
+EOT
+fi
 
 # ---- Adalet E-Imza baslat/durdur kisayolu (kuruluysa) ----
 if [ -f "$DIR/adalet/eimza-tray.jar" ]; then
