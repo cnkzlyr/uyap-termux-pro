@@ -155,7 +155,9 @@ editor_indir() {
   if [ -z "$zip" ]; then
     local sayfa url
     sayfa="$(curl -fsSL --max-time 40 https://uyap.gov.tr/UYAP-Editor 2>/dev/null)" || { fail "uyap.gov.tr sayfasina ulasilamadi"; return 1; }
-    url="$(printf '%s' "$sayfa" | grep -oE 'https://rayp\.adalet\.gov\.tr/[A-Za-z0-9_./-]*uyapeditor_[0-9.]+_amd64\.zip' | head -1)"
+    # Sayfadaki baglanti protokolsuz ve tirnaksiz olabilir: href=//rayp.adalet.gov.tr/.../uyapeditor_5.4.20_amd64.zip
+    url="$(printf '%s' "$sayfa" | grep -oE '(https?:)?//rayp\.adalet\.gov\.tr/[A-Za-z0-9_./-]*uyapeditor_[0-9.]+_amd64\.zip' \
+           | sed -E 's#^(https?:)?//#https://#' | sort -t_ -k2 -V | tail -1)"
     [ -n "$url" ] || { fail "resmi sayfada Pardus/Debian paketi baglantisi bulunamadi (sayfa degismis olabilir)"; return 1; }
     echo "   indiriliyor: $url"
     curl -fL $CURL_I --max-time 1200 -o "$T/editor.zip" "$url" || { fail "editor indirilemedi"; return 1; }
