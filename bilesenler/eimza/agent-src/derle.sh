@@ -9,7 +9,8 @@ T="$(mktemp -d)"
 mkdir -p "$T/src/eimza" "$T/src/tr/gov/adalet/service/framework/adalet/eimza/eimzatray/gui" "$T/out"
 cp "$D/../TermuxCcidProvider.java" "$D/Agent.java" "$D/Kimlik.java" "$T/src/eimza/"
 cp "$D/gui/e.java" "$T/src/tr/gov/adalet/service/framework/adalet/eimza/eimzatray/gui/e.java"
-javac --release 11 -encoding UTF-8 -d "$T/out" $(find "$T/src" -name '*.java')
+find "$T/src" -name '*.java' > "$T/kaynaklar.txt"
+javac --release 11 -encoding UTF-8 -d "$T/out" @"$T/kaynaklar.txt"
 printf 'Premain-Class: eimza.Agent\nCan-Redefine-Classes: false\nCan-Retransform-Classes: false\nImplementation-Title: UYAP-Termux\nImplementation-Version: 1.0\nImplementation-Vendor: Av. Can KIZILYAR\nCopyright: (c) 2026 Av. Can KIZILYAR - Tum haklari saklidir\n' > "$T/manifest.txt"
 jar cfm "$D/../eimza-agent.jar" "$T/manifest.txt" -C "$T/out" .
 rm -rf "$T"

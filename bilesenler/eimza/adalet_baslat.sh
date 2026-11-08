@@ -58,7 +58,7 @@ choose_display() {
       say "Gorunmez X ekrani (Xvfb :99) baslatiliyor ..."
       nohup Xvfb :99 -screen 0 1024x768x24 -nolisten tcp -ac >>"$LOG" 2>&1 &
       echo $! > "$XPID"
-      for i in $(seq 1 20); do x_alive 99 && break; sleep 0.3; done
+      for _ in $(seq 1 20); do x_alive 99 && break; sleep 0.3; done
     fi
     x_alive 99 && { echo ":99"; return 0; }
   fi
@@ -66,7 +66,7 @@ choose_display() {
 }
 
 do_stop() {
-  p=$(tray_pid) && { kill "$p" 2>/dev/null; for i in 1 2 3 4 5 6 7 8; do pid_alive "$p" || break; sleep 0.5; done; pid_alive "$p" && kill -9 "$p" 2>/dev/null; }
+  p=$(tray_pid) && { kill "$p" 2>/dev/null; for _ in 1 2 3 4 5 6 7 8; do pid_alive "$p" || break; sleep 0.5; done; pid_alive "$p" && kill -9 "$p" 2>/dev/null; }
   rm -f "$PIDF" "$DISPF"
 }
 
@@ -117,7 +117,7 @@ nohup "$J21" -Xms64m -Xmx512m -XX:+UseSerialGC -Djava.awt.headless=false -Dfile.
 echo $! > "$PIDF"; echo "$DSP" > "$DISPF"
 
 if [ "$SESSIZ" = "1" ]; then exit 0; fi
-for i in $(seq 1 120); do
+for _ in $(seq 1 120); do
   port_open && { echo "Hazir: http://127.0.0.1:$PORT  (tarayicidan UYAP Avukat Portal -> e-imza ile giris)"; exit 0; }
   tray_pid >/dev/null || { echo "Uygulama kapandi. Gunluk: tail -30 $LOG"; exit 1; }
   sleep 1

@@ -45,7 +45,7 @@ disown 2>/dev/null
 type ckz_satir >/dev/null 2>&1 && ckz_satir
 echo "E-imza izleyicisi basladi. Okuyucuyu takin; Android izin sorarsa 'Izin ver'"
 echo "(mumkunse 'varsayilan olarak kullan' kutusunu isaretleyin). Cikarip takarsaniz kendiliginden baglanir."
-for i in $(seq 1 60); do
+for _ in $(seq 1 60); do
   if [ -f "$STATE/bridge.json" ]; then echo "Kopru hazir. ($(grep -o 'okuyucu:.*' "$STATE/bridge.log" | head -1))"; exit 0; fi
   sleep 0.5
 done
