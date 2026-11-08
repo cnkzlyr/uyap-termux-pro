@@ -26,7 +26,8 @@ import javax.swing.UIManager;
  *   uyap.kaydirma  true/false (akici kaydirma; calisirken F9 ile ac/kapa)
  *   uyap.hz        hedef kare hizi (varsayilan: ekranin yenileme hizi, en az 60)
  *   uyap.java.taklit  true: JDK 15+ uzerinde UYAP'in "Java 6-14 arasi olmali" kontrolunu acilis
- *                  sirasinda gecer (jar degistirilmez; ilk pencere acilinca gercek surum geri yazilir)
+ *                  ve imzalama (F7) oncesi kontrolu de gecer: oturum boyunca 11 gosterilir (jar degistirilmez;
+ *                  gercek surum uyap.gercek.java.version'da). Acilista geri yazmak icin: uyap.java.taklit=acilis
  *   uyap.alt.menu  false (varsayilan): tek basina basilip birakilan Alt, editorun kisayol harflerini (KeyTips)
  *                  ve menu odagini ACMAZ; Alt+harf kombinasyonlari ve AltGr (Turkce @, €, ...) etkilenmez
  *   uyap.instance.dir  tek-ornek servisinin durum klasoru (bos = kapali)
@@ -53,7 +54,8 @@ public final class Baslatici {
         else DosyaSecici.turkceMetinler();
         if (!Boolean.parseBoolean(System.getProperty("uyap.alt.menu", "false"))) TekAltEngeli.kur();
         PdfYaziTipi.baslat();
-        if (gercekSurum != null) gercekSurumuGeriYaz(gercekSurum);
+        // UYAP surumu hem acilista hem her imzalamada (WPAppManager.a()) kontrol ediyor: kalici tutulur
+        if (gercekSurum != null && "acilis".equalsIgnoreCase(System.getProperty("uyap.java.taklit"))) gercekSurumuGeriYaz(gercekSurum);
 
         String ilk = args.length > 0 ? args[0] : null;
         Class<?> c = Class.forName(UYAP_ANA);
@@ -139,10 +141,11 @@ public final class Baslatici {
     private static String javaSurumunuTaklitEt() {
         String v = System.getProperty("java.version");
         if (javaAnaSurum(v) <= 14) return null;
-        if (!Boolean.parseBoolean(System.getProperty("uyap.java.taklit", "true"))) return null;
+        String t = System.getProperty("uyap.java.taklit", "true");
+        if (!Boolean.parseBoolean(t) && !"acilis".equalsIgnoreCase(t)) return null;
         System.setProperty("uyap.gercek.java.version", v);
         System.setProperty("java.version", "11.0.99");
-        System.out.println("[UYAP] Java " + v + ": editorun 6-14 surum kontrolu icin acilista 11 gosteriliyor.");
+        System.out.println("[UYAP] Java " + v + ": editorun 6-14 surum kontrolu (acilis + imzalama) icin 11 gosteriliyor.");
         return v;
     }
 

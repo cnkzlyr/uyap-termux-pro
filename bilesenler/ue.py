@@ -221,6 +221,12 @@ def jdk_adaylari():
                   "java-21-openjdk", "openjdk-21", "*"):
         adaylar += sorted(glob.glob(os.path.join(jvm, kalip, "bin", "java")))
     adaylar += [os.path.join(PREFIX, "opt", "openjdk-11", "bin", "java"), os.path.join(PREFIX, "opt", "openjdk", "bin", "java")]
+    # Elle kurulmuş JDK'lar (ör. jdk-14.0.2 arşivi açılmış): ~/, ~/java, ~/jdk, $PREFIX/opt, $PREFIX/share altında
+    for kok in (HOME, os.path.join(HOME, "java"), os.path.join(HOME, "jdk"), os.path.join(PREFIX, "opt"),
+                os.path.join(PREFIX, "share")):
+        for kalip in ("*jdk*", "*jre*", "zulu*", "java-*"):
+            adaylar += sorted(glob.glob(os.path.join(kok, kalip, "bin", "java")))
+            adaylar += sorted(glob.glob(os.path.join(kok, kalip, "*", "bin", "java")))
     adaylar += sorted(glob.glob("/usr/lib/jvm/*/bin/java"))
     w = shutil.which("java")
     if w and os.path.realpath(w) != "/system/bin/java":
