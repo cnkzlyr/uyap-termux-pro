@@ -1,6 +1,6 @@
 # CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
 # CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
-# CKZ-MUHUR/1 j3UnBZeaLDaz/8Re4VhhB/j5dhxR0V+s3YayIG3Ek6JYomq9pnBfMQ94C7mfh6AT6jBJLv0fldsDY8vu3qIHAg==
+# CKZ-MUHUR/1 MUHURSUZ
 # marka.sh — telif / kimlik bildirimi (diger betikler tarafindan 'source' edilir)
 CKZ_YAZAR="Av. Can KIZILYAR"
 CKZ_SURUM="1.1"

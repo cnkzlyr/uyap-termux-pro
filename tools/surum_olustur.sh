@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
 # CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
-# CKZ-MUHUR/1 0yDOEmrTC7a+SANLmkzvFNjcBihg+6GU9xOZ7Ir5AaFZN8yaAq/g2N74+5R30xXj82mz9Eo3ihda8gT1vRb8AA==
+# CKZ-MUHUR/1 MUHURSUZ
 # YAZAR ARACI: paketi Av. Can KIZILYAR'in ozel anahtariyla muhurler ve dagitim zip'ini uretir.
 #   bash tools/surum_olustur.sh [SURUM]      ortam: CKZ_INDIRME=https://...  CKZ_CIKTI=~/cikti
 # Gerekenler: python + cryptography (Termux: pkg install python-cryptography). Ozel anahtar: ~/.ckz-muhur/ed25519.pem

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
 # CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
-# CKZ-MUHUR/1 kRG19H5pDdQZf+P0QMzdwQE8/jjjGKfSsFzFjQDXeF8mzfnf+pn3ulb1ENAsob4qmO8ghKTf9d5wbOctrHZCDQ==
+# CKZ-MUHUR/1 MUHURSUZ
 """Herkesin kullanabilecegi DOGRULAMA araci: surumun yazar tarafindan imzalanip imzalanmadigini ve degistirilip
 degistirilmedigini kontrol eder (ek bagimlilik gerektirmez).
 

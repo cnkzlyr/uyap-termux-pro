@@ -1,7 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
 # CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
-# CKZ-MUHUR/1 e0UDflDeeaEhgbfb3HuMZmWetMSj3lxiROfTpDmwKGUKlGM72Zsaw9L6nweK8I19iKJ+ATmewfC23idpQpGBCg==
+# CKZ-MUHUR/1 MUHURSUZ
 # Adalet E-Imza (https://eimza.adalet.gov.tr) uygulamasini Termux'a kurar.
 # Resmi Linux .deb paketinin icindeki platformdan bagimsiz JAR'i cikarir (paketin x86 Java'si KULLANILMAZ;
 # uygulama Java 21 ister, Termux'un openjdk-21'i kullanilir).

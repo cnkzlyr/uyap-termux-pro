@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
 # CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
-# CKZ-MUHUR/1 eenK5Ryqv9lYCJRqrqdP/bkBJ3frn5vDFSkB9IEuVnL97e/ao02hy2G00kjhJ9oTWxjF5E83/bElPwsTIVsaCg==
+# CKZ-MUHUR/1 MUHURSUZ
 """YAZAR TARAFI arac: kaynaklara telif basligi + bireysel muhur gomer, surumun manifestini Ed25519 ile imzalar.
 
   python3 muhurle.py --anahtar-olustur [--sifreli]        (bir kez; ozel anahtar ~/.ckz-muhur/ed25519.pem, izin 600)

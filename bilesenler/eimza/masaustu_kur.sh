@@ -1,7 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
 # CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
-# CKZ-MUHUR/1 Gpys+CMxsl7jxP3DwrF1pA0WQ7uCRhkbr2pDkXTY8PZCDJIZZSzCFpXEiujw3FtmkSP5m3dFJcd+DcGYCud8Cg==
+# CKZ-MUHUR/1 MUHURSUZ
 # UYAP Editor'u XFCE'de "uygulama" yapar: baslat menusu + masaustu simgesi + .udf/.usf dosyalarina cift tikla.
 # Cift tiklanan dosya editorde ACILIR (bos pencere acilmaz); editor zaten aciksa belge onda acilir.
 DIR="$(cd "$(dirname "$0")" && pwd)"

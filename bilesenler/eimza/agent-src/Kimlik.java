@@ -1,6 +1,6 @@
 // CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
 // CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
-// CKZ-MUHUR/1 79QShO7J5yn70JDaVOIz8op3atvGv4sGvMkSxbF1temd4xH2KF9bb4nSWU5nwR4dXjr1kHDmLdph0RRE97ozCA==
+// CKZ-MUHUR/1 MUHURSUZ
 package eimza;
 
 /** Yazar / telif kimligi. © 2026 Av. Can KIZILYAR — Tüm hakları saklıdır. Bkz. LICENSE.txt */

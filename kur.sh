@@ -1,7 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
 # CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
-# CKZ-MUHUR/1 qTGvS5tLopZlFDbPtC65PdMlAPdPd5qUrKmCnl6zwedOUTeVu9p4M+02/pIGBh2QZW8EdXAE7bZTubw3sayJDA==
+# CKZ-MUHUR/1 MUHURSUZ
 # UYAP-Termux Kurulum Paketi — ana kurulum betigi.
 #   bash kur.sh [--kabul] [--hafif] [--deneme] [--yine-de]
 #               [--editor-zip YOL] [--adalet-deb YOL] [--parmak XXXX-XXXX-...] [--paket-atla]

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
 # CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
-# CKZ-MUHUR/1 Yk/DYWZSEe1CCiJMbEbsqOWe/Zw49OzRCCfXi0mBVQEzk1Q1rBo8XrKpgjjz0FCg5HdUPPEgg+yYkKt51k4UBw==
+# CKZ-MUHUR/1 MUHURSUZ
 """Saf-Python Ed25519 DOGRULAMA (RFC 8032). Ek bagimlilik gerektirmez; imza atmak icin degil, yalnizca dogrulama icindir."""
 import hashlib
 

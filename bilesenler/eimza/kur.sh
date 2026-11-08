@@ -1,7 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
 # CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
-# CKZ-MUHUR/1 TUg5PScoqOA+isizKzPrckx82PHzIIOlqumSXIjVCM/vLU7ZqtpP9fyrqcMedgA9+UytUy6qfNH3Fd9Tj1zgDA==
+# CKZ-MUHUR/1 MUHURSUZ
 # Tek komutla kurulum: bash ~/eimza/kur.sh
 #  - Termux her acildiginda e-imza koprusu (+ Adalet E-Imza) otomatik baslar
 #  - UYAP Editor: XFCE uygulamasi + .udf/.usf cift tiklama

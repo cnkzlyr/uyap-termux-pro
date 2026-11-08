@@ -1,7 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
 # CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
-# CKZ-MUHUR/1 HHIYE7TY31nI61AruClIx1hn5pXjlRMUpsVBWpZgglurWJXXhgHXKdQnWWqBY5tA5oOUtZEiXfaAk+rphDJVBg==
+# CKZ-MUHUR/1 MUHURSUZ
 # Termux her acildiginda cagrilir (kabuk kancasi / Termux:Boot / XFCE otomatik baslat). Idempotenttir:
 # zaten calisan bilesenlere dokunmaz. Ortam: EIMZA_OTO=0 (tumunu kapat), EIMZA_TRAY=0 (Adalet uygulamasini kapat)
 DIR="$(cd "$(dirname "$0")" && pwd)"

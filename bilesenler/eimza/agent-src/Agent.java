@@ -1,6 +1,6 @@
 // CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
 // CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
-// CKZ-MUHUR/1 bg2QFStjmJf5op2h3xB/1v+dkZwI4tcw93VF+6EzvI7R6ik2u5i/EW6CKlio6tGFlWr5kuAorklvSTg+PF2tCw==
+// CKZ-MUHUR/1 MUHURSUZ
 package eimza;
 
 import java.lang.instrument.Instrumentation;

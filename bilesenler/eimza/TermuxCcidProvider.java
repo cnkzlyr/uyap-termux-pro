@@ -1,6 +1,6 @@
 // CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
 // CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
-// CKZ-MUHUR/1 S0WBKb4l+bq4WRHzp2N3B57M9//k+EtanxwNCu0xxyzOx9h0AphRmi8Ysja/ckyRm3Jwl3+Djhty+CPPUVcrDA==
+// CKZ-MUHUR/1 MUHURSUZ
 package eimza;
 
 import javax.smartcardio.ATR;

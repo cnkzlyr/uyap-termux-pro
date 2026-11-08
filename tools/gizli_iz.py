@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
 # CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
-# CKZ-MUHUR/1 6RkpB0vVSM0Rakc138u4//k3jmfG1N6Gb0t8kArfOquvyb5YrlvHlTyVYT5+cQX2SLLe251d3Azu1NlwkPbFAA==
+# CKZ-MUHUR/1 MUHURSUZ
 """Gorunmez iz (sifir-genislikli karakterler): metnin icine yazar kimligini gomer / bulup cozer.
 Kullanim:  python3 gizli_iz.py --ara KLASOR     (dosyalarda gomulu izleri listeler)
            python3 gizli_iz.py --kodla "metin"  (gomulecek gorunmez diziyi yazdirir)"""

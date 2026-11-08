@@ -1,7 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
 # CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
-# CKZ-MUHUR/1 6NXV9X6hg3VMWXorx/WQP9P7DzlwUMRq337VW6tnJOhbKL0lgUdwr07rAqKFZatx96proQmQLFqrJs/eR4ggDw==
+# CKZ-MUHUR/1 MUHURSUZ
 # Termux:X11 + XFCE masaustunu baslatir (Termux:X11 uygulamasi otomatik acilir). Kullanim: bash ~/eimza/xfce_baslat.sh
 # Hafif masaustu icin: MASAUSTU=fluxbox bash ~/eimza/xfce_baslat.sh
 DIR="$(cd "$(dirname "$0")" && pwd)"

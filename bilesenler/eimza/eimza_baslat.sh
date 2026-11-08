@@ -1,7 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
 # CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
-# CKZ-MUHUR/1 9TfKf3sOQKMSyvvI/CZJg97gfGIzgaxTrTxL74NR2DuJjhLI/miMTB6JAnEcSez1n9WVI2jedTs6cU6mSiv0BA==
+# CKZ-MUHUR/1 MUHURSUZ
 # E-imza okuyucu izleyicisini (ve koprusunu) arka planda baslatir. Okuyucu cikarilip takilinca kendiliginden baglanir.
 #   bash ~/eimza/eimza_baslat.sh        -> baslat
 #   bash ~/eimza/eimza_baslat.sh stop   -> durdur (karti da kapatir)

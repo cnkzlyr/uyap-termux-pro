@@ -1,7 +1,6 @@
 # Resmi/ucuncu taraf ikili dosyalar ve kisisel veriler ASLA depoya girmez
 jars/
 *.jar
-!bilesenler/eimza/eimza-agent.jar
 bilesenler/eimza/adalet/
 *.class
 __pycache__/

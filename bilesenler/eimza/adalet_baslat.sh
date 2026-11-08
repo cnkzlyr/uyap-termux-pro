@@ -1,7 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
 # CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
-# CKZ-MUHUR/1 TzpOjZ9Nv4u/TMRcQbtrLUL8BfJ09PncN3Cp8QLKRaJvAWt4+7LMhBbNWCJ42ytVsihlgWFRcQ3dNItFeCQtDA==
+# CKZ-MUHUR/1 MUHURSUZ
 # Adalet E-Imza uygulamasini (127.0.0.1:5975) baslatir/durdurur. Kart erisimi e-imza koprusu uzerinden yapilir.
 #   bash ~/eimza/adalet_baslat.sh [start|stop|durum|restart] [--sessiz] [--ekran]
 # --ekran: uygulama gorunmez (Xvfb) ekranda calisiyorsa ve gercek X11 ekrani (XFCE) acildiysa oraya tasir.

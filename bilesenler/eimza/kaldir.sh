@@ -1,7 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
 # CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
-# CKZ-MUHUR/1 QGMOvpm9ybn6rGDiMMzAlfgYo3Akxf2Cdn8c7ectSx4yAoHjIvSHbnfZg7xOc4o2q20ALmCLcobvnlUxmWjFCw==
+# CKZ-MUHUR/1 MUHURSUZ
 # Otomatik baslatmayi ve masaustu tumlesmesini geri alir (dosyalari silmez).
 DIR="$(cd "$(dirname "$0")" && pwd)"
 for rc in "$HOME/.bashrc" "$HOME/.profile" "$HOME/.zshrc"; do

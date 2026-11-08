@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
 # CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
-# CKZ-MUHUR/1 Ing5hSfnxoDPzUulLr+RmSZvsuxIcU1p70wS1ASrasi7mo1nMRGSaJQDYlslpFvVCAWpyC+MNyQP904zol0lAA==
+# CKZ-MUHUR/1 MUHURSUZ
 """
 ccid_bridge.py - Rootsuz Android/Termux icin USB CCID akilli kart okuyucu koprusu.
 

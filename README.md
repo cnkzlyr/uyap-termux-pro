@@ -1,6 +1,6 @@
 <!-- CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır. -->
 <!-- CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt -->
-<!-- CKZ-MUHUR/1 yNPCmC0lrv2CLWOUh/oooBgOrGNFjfQhymcfKaUnOcHCLxPcAiomD7/bBlkLvfdPpEPfgLQTjK3C58hQWNigCQ== -->
+<!-- CKZ-MUHUR/1 MUHURSUZ -->
 # UYAP-Termux Kurulum Paketi
 
 **© 2026 Av. Can KIZILYAR — Tüm hakları saklıdır.** · Resmî değildir (bkz. `LICENSE.txt`, `NOTICE.txt`).

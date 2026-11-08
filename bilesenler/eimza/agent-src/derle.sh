@@ -1,7 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır.
 # CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt
-# CKZ-MUHUR/1 SVIJLnaM0mX6PxBCgfvgnBiRWIXm1sAfIe3wFG0vEoXOMboroBUY7XAJpSN/PCevw72ivjKJlJR9JJghwZZeCA==
+# CKZ-MUHUR/1 MUHURSUZ
 # eimza-agent.jar'i kaynaktan yeniden uretir (JDK 11+ gerekir). Kullanim: bash ~/eimza/agent-src/derle.sh
 set -e
 D="$(cd "$(dirname "$0")" && pwd)"
