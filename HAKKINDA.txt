@@ -1,4 +1,4 @@
-UYAP-Termux Kurulum Paketi  v1.0
+UYAP-Termux Pro  v2.0
 © 2026 Av. Can KIZILYAR — Tüm hakları saklıdır.
 
 Resmî değildir. UYAP Editör ve Adalet E-İmza, T.C. Adalet Bakanlığı'na aittir ve pakete dahil değildir.

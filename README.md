@@ -1,44 +1,132 @@
 <!-- CKZ-HDR/1 | © 2026 Av. Can KIZILYAR⁠​‌​​​​‌‌​‌​​‌​‌‌​‌​‌‌​‌​​​‌​‌‌​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​​‌​​​‌‌​‌‌​​​‌​‌‌​‌​‌​​​​‌‌​‌​​‌​‌‌⁠ | Tüm hakları saklıdır. -->
 <!-- CKZ-HDR/1 | Yazılı izin olmadan çoğaltılamaz, değiştirilemez, dağıtılamaz; bu bildirim kaldırılamaz. Bkz. LICENSE.txt -->
 <!-- CKZ-MUHUR/1 MUHURSUZ -->
-# UYAP-Termux Kurulum Paketi
+# UYAP-Termux Pro
 
 **© 2026 Av. Can KIZILYAR — Tüm hakları saklıdır.** · Resmî değildir (bkz. `LICENSE.txt`, `NOTICE.txt`).
 
-Android telefonda **UYAP Doküman Editörü**'nü, `.udf`/`.usf` dosyalarına çift tıklayarak açmayı ve **USB e-imza
-okuyucusuyla** (TBB kırmızı token, ArkSigner vb.) **UYAP Avukat Portal**'a tarayıcıdan girmeyi sağlar.
+Android tablet ve telefonda (Termux + Termux:X11) **UYAP Doküman / Şablon Editörü**'nü masaüstündeki gibi
+kullanmak, `.udf`/`.usf` dosyalarını çift tıklayarak açmak ve **USB e-imza okuyucusuyla** (TBB kırmızı token,
+ArkSigner, ACR39 …) tarayıcıdan **UYAP Avukat Portal**'a girmek için kurulum paketi.
+
+Bu depo tabletteki **v3 yedeği sonrası** kurulumdan (21.09.2026) ve `uyap-termux` 1.0/1.1 paketlerinden
+türetilmiştir; geçmiş, commit'ler halinde korunmuştur (`git log`).
+
+## 2.0'da neler var
+
+| | |
+|---|---|
+| **Java 17/21 ile çalışır** | Editörün "Java sürümünüz 6–14 arası olmalı" engeli açılışta aşılır (jar'lar değiştirilmez). openjdk-11 artık zorunlu değil. |
+| **`uyap` komutu** | Tek komut: menü, durum, masaüstü, editör, ayarlar, e-imza, Adalet, yedek, tanı. |
+| **Kontrol Merkezi** | `uyap panel`: editör / okuyucu / Adalet E-İmza / Java durum kartları, tek dokunuşla işlemler, grafik ayarlar. |
+| **Ayarlar dosyası** | Tema (açık, koyu, macOS), ölçek (ya da DPI'ya göre otomatik), vurgu rengi, **dokunmatik mod**, kaydırma, bellek. |
+| **Word gibi akıcı kaydırma** | Kritik sönümlü yay; Ctrl/Shift+tekerlek artık editöre geçer; F9 ile aç/kapa. |
+| **PDF'te Times New Roman** | Editörün yazı tipi eşlemecisi Termux klasörlerini görür; `uyap yazitipi` ile birebir Times. |
+| **`.usf` → Şablon Editörü** | Şablonlar artık Doküman Editörü'nde açılmıyor. |
+| **Güvenli yedek** | Tarayıcı parolaları, belge otomatik kayıtları ve özel anahtarlar varsayılan olarak yedeğe girmez. |
+
+Tüm düzeltmelerin listesi: [DEGISIKLIKLER.md](DEGISIKLIKLER.md).
 
 ## Gerekenler
-* Android 8+ ve OTG destekli telefon, USB e-imza okuyucu.
-* Aşağıdaki **üç uygulama AYNI kaynaktan** (hepsi **F-Droid** veya hepsi **GitHub**) kurulmalıdır. Play Store sürümleri uyumsuzdur:
-  **Termux**, **Termux:X11**, **Termux:API**. (İsteğe bağlı: Termux:Boot.)
-* ~3 GB boş yer, internet.
+
+* Android 8+ ve OTG destekli tablet/telefon, USB e-imza okuyucu; ~3 GB boş yer, internet.
+* **Termux**, **Termux:X11**, **Termux:API** (isteğe bağlı **Termux:Boot**, **Termux:Widget**) — hepsi **aynı
+  kaynaktan** (hepsi F-Droid ya da hepsi GitHub). Play Store sürümleri uyumsuzdur.
 
 ## Kurulum
-1. Termux'u açın, depolama izni verin: `termux-setup-storage`
-2. Paketi indirin ve açın (yalnızca resmî adresten): `https://raw.githubusercontent.com/cnkzlyr/uyap-termux/main/uyap-termux-1.1.zip`
-   ```
-   cd ~ && unzip -o /sdcard/Download/uyap-termux-1.1.zip && cd uyap-termux-1.1
-   ```
-3. Kurulumu başlatın: `bash kur.sh` — lisansı okuyup `evet` yazın. (Kurulum başında **mühür doğrulaması** yapılır.)
-4. Kurulum bitince Termux'u kapatıp yeniden açın.
 
-**Yazar anahtar parmak izi (resmî değer):** `5141-02F5-BD04-CE67-6AA4-620F-4145-D84C`
-Kurulumda görünen parmak izi bununla aynı değilse paket sahte/değiştirilmiş olabilir; kurmayın.
+```bash
+termux-setup-storage                    # izin penceresinde "İzin ver"
+pkg install -y git
+git clone https://github.com/cnkzlyr/uyap-termux-pro ~/uyap-termux-pro
+bash ~/uyap-termux-pro/kur.sh --yine-de # git kopyası mühürsüzdür; mühürlü sürüm zip'inde --yine-de gerekmez
+```
+
+Kurulum resmî UYAP Editör'ü `uyap.gov.tr`'den, Adalet E-İmza'yı `cdn.uyap.gov.tr`'den indirir (pakette yoktur).
+Otomatik indirme olmazsa: `bash kur.sh --editor-zip /sdcard/Download/uyapeditor_*_amd64.zip --adalet-deb /sdcard/Download/adalet-eimza-tray*.deb`
+
+Seçenekler: `--hafif` (XFCE yerine fluxbox) · `--yazitipleri` (Microsoft Times/Arial) · `--deneme` (hiçbir şey
+değiştirmeden adımları yazar) · `--kabul` (soru sormaz).
+
+Sonra Android'de: Termux, Termux:X11, Termux:API için **pil optimizasyonunu kapatın**; Termux'a **"diğer
+uygulamaların üzerinde göster"** izni verin; Termux:API'yi bir kez açın.
 
 ## Kullanım
-* **Masaüstü/editör:** `uyap-masaustu` → Termux:X11 açılır; menüde/masaüstünde **UYAP Editör**; `.udf` çift tıklayın.
-* **E-imza:** okuyucuyu OTG ile takın, "İzin ver" deyin. Termux her açıldığında köprü ve Adalet E-İmza otomatik başlar.
-* **UYAP Avukat Portal:** Termux arka planda açıkken Chrome'dan e-imza ile girin (Chrome "yerel ağ" izni sorarsa verin).
-* **Telif/mühür bilgisi:** `uyap-hakkinda`
 
-## Otomatik indirme başarısız olursa
-Resmî sayfalardan elle indirip verin:
-`bash kur.sh --editor-zip /sdcard/Download/uyapeditor_*_amd64.zip --adalet-deb /sdcard/Download/adalet-eimza-tray*.deb`
+```
+uyap                  menü (durum özeti + işlemler)
+uyap masaustu         Termux:X11 + XFCE masaüstü
+uyap editor X.udf     belgeyi aç (editör açıksa aynı pencerede açılır)
+uyap panel            Kontrol Merkezi
+uyap durum            ● UYAP Editör  ● E-imza okuyucu  ● Adalet E-İmza  ● Java …
+uyap ayarlar          tema, ölçek, dokunmatik mod, kaydırma, bellek
+uyap yazitipi         PDF için Times New Roman
+uyap yedek            gizli verileri dışlayan tam yedek
+uyap tani             sorun giderme raporu (jetonlar gizlenmiş, panoya kopyalanır)
+```
 
-## Sorun giderme
-`~/.eimza/*.log`, `~/.uyap-editor/editor.log`; tanı: `bash ~/eimza/eimza_tani.sh`.
+Editörde: **F9** akıcı kaydırmayı aç/kapa · **Ctrl+Shift+F12** UYAP-Termux bilgisi.
 
-## Şeffaflık
-Yazılım PIN'lerinizi kaydetmez/iletmez ve hiçbir veriyi yazara göndermez. İnternete yalnızca kurulumda resmî sitelerden
-dosya indirmek için çıkar. Kaynak dosyalar okunabilir; ancak çoğaltılamaz/değiştirilemez (LICENSE.txt).
+**E-imza ile portal girişi:** okuyucuyu takın → "İzin ver" → `uyap durum`'da okuyucu ve Adalet E-İmza yeşil →
+telefonun Chrome'unda portala e-imza ile girin ("yerel ağ" izni sorulursa verin). PIN Android penceresinde sorulur.
+
+## Ayarlar
+
+`~/.config/uyap-termux/ayarlar.ini` (ilk açılışta oluşur; `uyap ayarlar` ya da Kontrol Merkezi ile düzenlenir):
+
+```ini
+[arayuz]
+tema = acik          ; acik | koyu | macos-acik | macos-koyu | sistem
+olcek = 1.2          ; 1.0–3.0 ya da otomatik. Editörün şerit menüsü 1.25'ten büyükte alttan kırpılabilir
+vurgu =              ; #RRGGBB
+dokunmatik = hayir   ; evet: kalın kaydırma çubuğu, geniş menüler
+[kaydirma]
+akici = evet
+adim = 75
+[java]
+yol =                ; boş = otomatik (11 > 17 > 21)
+bellek = otomatik    ; RAM'in ~%40'ı (768–4096 MB)
+surum_taklidi = evet
+[eimza]
+aktif = evet
+```
+
+Ortam değişkenleri ayarları ezer: `UYAP_TEMA`, `UYAP_OLCEK`, `UYAP_JAVA`, `UYAP_BELLEK`; `UYAP_TEK_ORNEK=0`
+(her belge ayrı JVM), `UYAP_AYRINTI=1` (ayrıntılı günlük), `EIMZA_PIN_MODE=android|swing`.
+
+## Gizlilik
+
+* PIN'ler kaydedilmez, iletilmez; yazara hiçbir veri gönderilmez.
+* `uyap yedek` tarayıcı profillerini (kayıtlı parolalar, çerezler) yalnızca `--tarayici`, editörün belge otomatik
+  kayıtlarını yalnızca `--belgeler` ile alır; `~/.ssh`, `~/.gnupg`, mühür özel anahtarı (`~/.ckz-muhur`) hiç alınmaz.
+  Yedek zip'i 600 izniyle yazılır. **Yedeği "bağlantıya sahip herkes" ile paylaşmayın.**
+
+## Klasörler (kurulumdan sonra)
+
+| Yol | İçerik |
+|---|---|
+| `~/ue.py`, `~/java/` | Editör başlatıcısı ve Java kaynakları (`~/.uyap-editor/siniflar`'a derlenir) |
+| `~/jars/` | Resmî UYAP Editör jar'ları + FlatLaf (SHA-256 doğrulamalı) |
+| `~/eimza/` | USB CCID köprüsü, Adalet E-İmza başlatıcısı, `-javaagent`, otomatik başlatma |
+| `~/.local/bin/uyap*` | `uyap`, `uyap-editor`, `uyap-masaustu`, `uyap-hakkinda` |
+| `~/.eimza/*.log`, `~/.uyap-editor/editor.log` | Günlükler (`uyap gunluk`) |
+
+## Geliştirme
+
+```bash
+python3 -m unittest discover -s testler     # ue.py birim testleri
+python3 bilesenler/eimza/selftest.py        # köprü: sahte CCID okuyucu + T=1 kart
+bash testler/java_testleri.sh               # Java bileşenleri + birim testleri + eimza-agent.jar
+shellcheck -S warning $(git ls-files '*.sh') bilesenler/uyap
+```
+
+Hepsi GitHub Actions'ta (`.github/workflows/test.yml`) çalışır. Mühürlü dağıtım zip'i yazarın cihazında
+`bash tools/surum_olustur.sh 2.0` ile üretilir (özel anahtar `~/.ckz-muhur/` — depoya ve yedeğe asla girmez).
+
+## Sınırlar
+
+* Bu sürümdeki değişiklikler x86_64 Linux'ta JDK 21 + Xvfb ve **gerçek UYAP Editör 5.4.19 jar'larıyla** sınandı;
+  Termux (aarch64) üzerinde gerçek okuyucuyla tam akış ayrıca denenmelidir.
+* Koyu temada editörün kendi araç çubuğu simgelerinin bazıları soluk görünür (simgeler UYAP'a ait).
+* Termux:X11'de dokunmatik "parmakla kaydırma" fare tekerleği gibi davranmaz; Termux:X11 ayarlarından
+  "Touchpad" ya da iki parmakla kaydırma kullanın.

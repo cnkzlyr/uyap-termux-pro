@@ -441,7 +441,7 @@ public final class KontrolMerkezi {
                 int e = l.indexOf('=');
                 if (e > 0 && !l.startsWith("#") && !l.startsWith(";") && l.substring(0, e).trim().equalsIgnoreCase(ad)) {
                     String v = l.substring(e + 1).trim();
-                    int yorum = v.indexOf(" #");
+                    int yorum = v.indexOf(';');           // ue.py ile ayni: yalnizca ';' satir ici yorum
                     return yorum >= 0 ? v.substring(0, yorum).trim() : v;
                 }
             }

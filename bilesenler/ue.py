@@ -91,7 +91,8 @@ def ayrinti(msg):
 
 # --------------------------------------------------------------------------- ayarlar
 def ayarlari_yukle(yol=AYAR_DOSYASI):
-    c = configparser.ConfigParser()
+    # ';' satır içi yorum olabilir ('#' olamaz: vurgu = #RRGGBB)
+    c = configparser.ConfigParser(inline_comment_prefixes=(";",))
     c.read_dict(VARSAYILAN_AYARLAR)
     if os.path.exists(yol):
         try:

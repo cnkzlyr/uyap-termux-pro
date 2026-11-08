@@ -3,13 +3,11 @@
 <!-- CKZ-MUHUR/1 MUHURSUZ -->
 # UYAP e-imza + Adalet E-İmza + UYAP Editör (Termux native / XFCE)
 
-## Tek komutla kurulum
-```
-cd ~ && cp ue.py ue.py.yedek
-unzip -o /sdcard/Download/eimza-termux-v3.zip
-bash ~/eimza/kur.sh
-```
-`kur.sh` şunları yapar: paketleri kurar → Termux her açıldığında otomatik başlatmayı ekler → Adalet E-İmza'yı
+## Kurulum
+Ana kurulum depo kökündeki `kur.sh` ile yapılır (bkz. üst klasördeki README). Yalnızca bu klasörü yeniden
+tümleştirmek için: `bash ~/eimza/kur.sh`. Durum ve işlemler için: `uyap` / `uyap panel`.
+
+`~/eimza/kur.sh` şunları yapar: paketleri kurar → Termux her açıldığında otomatik başlatmayı ekler → Adalet E-İmza'yı
 (Download'daki `adalet-eimza-tray*.deb`'den) kurar → UYAP Editör'ü XFCE uygulaması yapar → hepsini başlatır.
 Geri almak: `bash ~/eimza/kaldir.sh` (dosyaları silmez).
 
@@ -37,7 +35,7 @@ Sorun olursa: `bash ~/eimza/eimza_tani.sh`.
 * Menüde/masaüstünde **UYAP Editör**; `.udf` ve `.usf` çift tıklayınca editörde açılır (boş pencere açılmaz).
   `.desktop` içindeki `%F`, dosya yollarını `uyap-editor`'e verir.
 * Editör zaten açıksa belge onda açılır (yeni JVM açılmaz). Kapatmak için `UYAP_TEK_ORNEK=0`.
-* Elle: `python ~/ue.py belge.udf`. Günlük: `~/.uyap-editor/editor.log`.
+* Elle: `uyap editor belge.udf` (ya da `python ~/ue.py belge.udf`). Günlük: `~/.uyap-editor/editor.log`.
 
 ## Sınırlar
 * Test: x86 Linux'ta JDK 11/21 + sahte CCID okuyucuyla. Gerçek Termux'ta (aarch64) tam akış denenmedi.
