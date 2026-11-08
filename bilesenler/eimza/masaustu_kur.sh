@@ -39,7 +39,7 @@ chmod +x "$BIN/uyap-editor"
 # ---- uyap komutu (menü, durum, ayarlar, panel ...) ----
 if [ -f "$DIR/../uyap" ] || [ -f "$HOME_DIR/.ckz-kurulum/bilesenler/uyap" ]; then
   src="$DIR/../uyap"; [ -f "$src" ] || src="$HOME_DIR/.ckz-kurulum/bilesenler/uyap"
-  cp -f "$src" "$BIN/uyap" && chmod +x "$BIN/uyap"
+  cp -f "$src" "$BIN/uyap.yeni" && chmod +x "$BIN/uyap.yeni" && mv -f "$BIN/uyap.yeni" "$BIN/uyap"
   [ -d "${PREFIX:-/nonexistent}/bin" ] && ln -sf "$BIN/uyap" "$PREFIX/bin/uyap" 2>/dev/null
 fi
 

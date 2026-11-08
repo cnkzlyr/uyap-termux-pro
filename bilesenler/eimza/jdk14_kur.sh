@@ -37,8 +37,10 @@ with open(yol, "w", encoding="utf-8") as f:
 PY
 }
 
-calistir() {  # glibc JDK'yi LD_PRELOAD olmadan calistir
-  env -u LD_PRELOAD -u LD_LIBRARY_PATH FONTCONFIG_FILE="$PREFIX/etc/fonts/fonts.conf" "$@"
+calistir() {  # glibc JDK'yi LD_PRELOAD olmadan calistir. -Xshare:off: JDK 14'un hazir CDS arsivi 64K sayfa
+  # bekliyor, Android cekirdegi 4K: "Unable to map CDS archive" (zararsiz ama gurultulu) -> kapat
+  local java="$1"; shift
+  env -u LD_PRELOAD -u LD_LIBRARY_PATH FONTCONFIG_FILE="$PREFIX/etc/fonts/fonts.conf" "$java" -Xshare:off "$@"
 }
 
 bashrc_temizle() {
@@ -108,9 +110,9 @@ jdk_hazirla() {
 dene() {
   say "== deneme"
   local v
-  v="$(calistir "$JDK/bin/java" -version 2>&1 | head -1)"
-  say "  java -version: $v"
-  printf '%s' "$v" | grep -q '14.0.2' || return 1
+  v="$(calistir "$JDK/bin/java" -version 2>&1)"
+  printf '%s\n' "$v" | sed 's/^/  /'
+  printf '%s' "$v" | grep -q 'version "14.0.2"' || return 1
   # AWT kutuphaneleri (X11) yukleniyor mu: gorunmez modda font + grafik ortamini baslat
   if calistir "$JDK/bin/java" -Djava.awt.headless=true -XshowSettings:properties -version 2>&1 | grep -q 'java.home'; then
     say "  JVM ayarlari okunuyor: tamam"

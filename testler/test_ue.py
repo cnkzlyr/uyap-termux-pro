@@ -134,6 +134,12 @@ class GlibcTesti(unittest.TestCase):
             self.assertEqual(ue.java_ortami("/j21/bin/java").get("LD_PRELOAD"), "/x/libtermux-exec.so")
             ue.glibc_jdk = lambda j: "glibc"
             self.assertNotIn("LD_PRELOAD", ue.java_ortami("/jdk14/bin/java"))
+            self.assertEqual(ue.java_on_ek("/jdk14/bin/java"), ["-Xshare:off"])
+            k = ue.komut_olustur("/jdk14/bin/java", 14, "cp", ue.ayarlari_yukle(os.path.join(tempfile.mkdtemp(), "a.ini")),
+                                 True, False, [], "/w")
+            self.assertEqual(k[:2], ["/jdk14/bin/java", "-Xshare:off"])
+            ue.glibc_jdk = lambda j: ""
+            self.assertEqual(ue.java_on_ek("/j21/bin/java"), [])
         finally:
             ue.glibc_jdk = eski
             os.environ.pop("LD_PRELOAD", None)

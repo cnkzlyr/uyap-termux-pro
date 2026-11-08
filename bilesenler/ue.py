@@ -240,6 +240,11 @@ def glibc_jdk(java):
     return ""
 
 
+def java_on_ek(java):
+    """glibc JDK 14 hazır CDS arşivini 64K sayfa için üretmiş; Android çekirdeği 4K → arşivi kapat."""
+    return ["-Xshare:off"] if java and glibc_jdk(java) == "glibc" else []
+
+
 def java_ortami(java):
     """glibc JDK'lar, Termux'un her sürece eklediği bionic LD_PRELOAD (termux-exec) ile çöker: temizlenir.
     (grun kullanılmaz: Java'yı bağlayıcı üzerinden başlatınca JAVA_HOME'u bulamaz ve boşluklu argümanları böler.)"""
@@ -258,7 +263,7 @@ def _jdk_surumu(java):
     if glibc_jdk(java) == "yamasiz":
         return 0
     try:
-        out = subprocess.run([java, "-version"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+        out = subprocess.run([java] + java_on_ek(java) + ["-version"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                              env=java_ortami(java), timeout=30).stdout.decode("utf-8", "ignore")
     except Exception:
         return 0
@@ -563,8 +568,7 @@ def olcek_degeri(ayar, dpi=None):
 # --------------------------------------------------------------------------- komut
 def komut_olustur(java, java_surum, cp, ayarlar, hazir, eimza_hazir, dosyalar, work_dir):
     a = ayarlar
-    komut = [
-        java,
+    komut = [java] + java_on_ek(java) + [
         "-Duser.home=%s" % work_dir,
         "-Duser.dir=%s" % work_dir,
         "-Xms256M",
@@ -663,7 +667,7 @@ def kontrol_merkezi(ayarlar):
     if not hazir:
         return 4
     flatlaf = [j for j in jars if os.path.basename(j) == "flatlaf.jar"]
-    return subprocess.call(env=java_ortami(java), args=[java, "-Xmx256M", "-XX:+UseSerialGC", "-Dawt.useSystemAAFontSettings=on", "-Dsun.java2d.uiScale=1",
+    return subprocess.call(env=java_ortami(java), args=[java] + java_on_ek(java) + ["-Xmx256M", "-XX:+UseSerialGC", "-Dawt.useSystemAAFontSettings=on", "-Dsun.java2d.uiScale=1",
                             "-cp", os.pathsep.join([DERLEME_DIR] + flatlaf), "uyaptermux.KontrolMerkezi"])
 
 

@@ -248,7 +248,9 @@ guncelle() {
   else
     echo "Kaynak bir git kopyası değil ($KAYNAK); yalnızca yeniden kuruluyor."
   fi
-  bash "$KAYNAK/kur.sh" --paket-atla --kabul --yine-de
+  # exec: kur.sh bu betigin ($HOME/.local/bin/uyap) uzerine yazar; bash calisan dosyayi okumaya devam ederse
+  # "syntax error near unexpected token" verir. exec ile bu kabuk artik bu dosyayi okumaz.
+  exec bash "$KAYNAK/kur.sh" --paket-atla --kabul --yine-de
 }
 
 panel() { exec env DISPLAY="${DISPLAY:-:0}" python3 "$UE" --panel; }
