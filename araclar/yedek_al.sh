@@ -3,7 +3,9 @@
 #
 #   bash yedek_al.sh [etiket] [--belgeler] [--deb] [--ek yol]...
 #     etiket      dosya adina eklenir (or. v3-oncesi, v3-sonrasi)
-#     --belgeler  /sdcard/Documents/UYAP_Belgelerim (UDF belgeleri) de dahil edilir (VARSAYILAN DEGIL: gizli/buyuk olabilir)
+#     --belgeler  /sdcard/Documents/UYAP_Belgelerim ve editorun otomatik kayitlari (.uki/yedekler) de dahil edilir
+#                 (VARSAYILAN DEGIL: muvekkil belgeleri gizlidir)
+#     --tarayici  Firefox/Chromium profilleri de dahil edilir (VARSAYILAN DEGIL: kayitli parolalar, cerezler, oturumlar)
 #     --deb       Download'daki adalet-eimza-tray*.deb / .AppImage dosyalari da dahil edilir
 #     --ek yol    ek dosya/klasor (HOME'a gore ya da mutlak); birden cok kez verilebilir
 #
@@ -12,13 +14,17 @@
 #         paket listeleri (pkg/pip/npm), depo bilgisi, sistem bilgisi, editor ayarlari (.uki), ve zip'in icinde
 #         geri_yukle.sh (yeni cihazda kurulum + bagimliliklari kuran betik).
 # PIN'ler, e-imza ozel anahtarlari ve calisma zamani jetonlari YEDEKTE OLMAZ (anahtarlar zaten karttadir).
+# Tarayici profilleri (kayitli parolalar!), SSH/GPG anahtarlari, muhur ozel anahtari (~/.ckz-muhur) ve belge
+# otomatik kayitlari varsayilan olarak HARIC tutulur. Zip yalnizca sahibinin okuyabilecegi izinle (600) yazilir.
+# !!! Yedegi "baglantiya sahip herkes" ile paylasmayin (Drive/Dropbox): kisiye ozel paylasin.
 set -u
-ETIKET="yedek"; BELGELER=0; DEB=0; EKLER=()
+ETIKET="yedek"; BELGELER=0; DEB=0; TARAYICI=0; EKLER=()
 first=1
 while [ $# -gt 0 ]; do
   case "$1" in
     --belgeler) BELGELER=1 ;;
     --deb) DEB=1 ;;
+    --tarayici) TARAYICI=1 ;;
     --ek) shift; [ $# -gt 0 ] && EKLER+=("$1") ;;
     -*) echo "Bilinmeyen secenek: $1"; exit 2 ;;
     *) if [ "$first" = "1" ]; then ETIKET="$1"; first=0; else EKLER+=("$1"); fi ;;
@@ -112,7 +118,8 @@ Yeni cihazda:
   2) Termux:  pkg install -y unzip ; termux-setup-storage
   3) unzip -o <bu zip> geri_yukle.sh   ve   bash geri_yukle.sh <bu zip>
 Ayrintilar geri_yukle.sh'in basindaki yorumlarda. Yedegin icerigi: manifest/dosya_listesi.txt
-Gizlilik: PIN/ozel anahtar yoktur. Editor ayarlari son acilan dosya adlarini icerebilir. Belgeler varsayilan olarak dahil degildir.
+Gizlilik: PIN/ozel anahtar, tarayici profili (kayitli parolalar) ve belge otomatik kayitlari varsayilan olarak YOKTUR.
+Editor ayarlari son acilan dosya adlarini icerebilir. Bu zip'i "baglantiya sahip herkes" ile PAYLASMAYIN.
 OKU
 cat > "$STG/geri_yukle.sh" <<'GERI_YUKLE_BITTI'
 #!/data/data/com.termux/files/usr/bin/bash
@@ -171,9 +178,9 @@ if [ "$PAKET" = "1" ]; then
   say "== 1/4 paket deposu ve paketler"
   run pkg update -y
   if [ -s "$TMPD/manifest/repo_paketleri.txt" ]; then
-    for r in $(cat "$TMPD/manifest/repo_paketleri.txt"); do
+    while read -r r; do [ -n "$r" ] || continue
       say "  depo: $r"; run pkg install -y "$r" || fail "depo kurulamadi: $r"
-    done
+    done < "$TMPD/manifest/repo_paketleri.txt"
     run pkg update -y
   fi
   if [ -s "$TMPD/manifest/paketler_manuel.txt" ]; then
@@ -208,12 +215,13 @@ if [ "$DOSYA" = "1" ]; then
   ESKI=""
   if [ -d "$TMPD/home" ]; then
     ESKI="$HOME/.geri_yukle_eski_$TS"
-    for item in $(cd "$TMPD/home" && ls -A); do
+    while IFS= read -r -d '' src; do
+      item="$(basename "$src")"
       if [ -e "$HOME/$item" ] || [ -L "$HOME/$item" ]; then
         run mkdir -p "$ESKI"; run mv "$HOME/$item" "$ESKI/$item"
       fi
-      run cp -a "$TMPD/home/$item" "$HOME/$item"
-    done
+      run cp -a "$src" "$HOME/$item"
+    done < <(find "$TMPD/home" -mindepth 1 -maxdepth 1 -print0)
     [ -n "$ESKI" ] && [ -d "$ESKI" ] && say "  (mevcut dosyalar buraya tasindi: $ESKI)"
   fi
   # depolama: Download altindaki editor ayarlari (.uki vb.)
@@ -262,15 +270,28 @@ add "$STG/geri_yukle.sh" "geri_yukle.sh"
 for x in manifest sistem; do add "$STG/$x" "$x"; done
 
 echo "== 3/4 zip olusturuluyor"
-python3 - "$OUT" "$ITEMS" "$STG" <<'PYBUILD'
+umask 077
+YEDEK_TARAYICI="$TARAYICI" YEDEK_BELGELER="$BELGELER" python3 - "$OUT" "$ITEMS" "$STG" <<'PYBUILD'
 import os, sys, zipfile, fnmatch, stat, time
 out, items_path, stg = sys.argv[1:4]
 DIR_EXCL = {"__pycache__", ".cache", "Trash", ".git", "node_modules"}
-FILE_EXCL = ["*.class", "*.pyc", "*.log", "*.pid", "*.lck", ".akici.hash", "bridge.json",
+FILE_EXCL = ["*.class", "*.pyc", "*.log", "*.log.gz", "*.pid", "*.lck", ".akici.hash", "bridge.json",
              "instance.properties", "starting.pid", "tani.txt", "*.tmp", "mimeinfo.cache",
              "eimza-termux*.zip", "*.zip"]
 PATH_EXCL = ["home/.local/lib/*", "home/.local/share/Trash/*", "home/.eimza/*.lck/*",
-             "home/.eimza/adalet.display", "home/.termux/x11/*.sock"]
+             "home/.eimza/adalet.display", "home/.termux/x11/*.sock",
+             "home/.uyap-editor/siniflar/*", "home/.config/pulse/*", "home/.local/share/recently-used.xbel",
+             "home/.local/share/gvfs-metadata/*", "downloads_uki/.uki/logs/*", "downloads_uki/.uki/smartCardSessionHandler"]
+# GIZLI: yalnizca acik secenekle alinir
+GIZLI_TARAYICI = ["home/.config/mozilla/*", "home/.mozilla/*", "home/.config/chromium/*",
+                  "home/.config/google-chrome/*", "home/.cache/*"]
+GIZLI_BELGE = ["downloads_uki/.uki/yedekler/*"]
+# ASLA: hicbir secenekle alinmaz
+ASLA = ["home/.ckz-muhur/*", "home/.ssh/*", "home/.gnupg/*", "home/.config/gh/*", "home/.git-credentials",
+        "home/.netrc", "home/.pki/*", "home/.config/uyap-termux/gizli*"]
+if os.environ.get("YEDEK_TARAYICI") != "1": PATH_EXCL += GIZLI_TARAYICI
+if os.environ.get("YEDEK_BELGELER") != "1": PATH_EXCL += GIZLI_BELGE
+PATH_EXCL += ASLA
 def excluded(arc, name):
     if any(fnmatch.fnmatch(name, p) for p in FILE_EXCL): return True
     if any(fnmatch.fnmatch(arc, p) for p in PATH_EXCL): return True
@@ -313,6 +334,7 @@ with zipfile.ZipFile(out + ".part", "w", zipfile.ZIP_DEFLATED, allowZip64=True) 
             if excluded(a, os.path.basename(a)) and not a.endswith((".sh", ".py", ".txt")): continue
             add_file(z, src, a)
     z.writestr("manifest/dosya_listesi.txt", "\n".join(sorted(listing)) + "\n")
+os.chmod(out + ".part", 0o600)
 os.replace(out + ".part", out)
 print("  %d dosya, %.1f MB (sikistirilmamis)" % (n_files, n_bytes / 1048576.0))
 PYBUILD
@@ -337,3 +359,5 @@ SZ="$(du -h "$OUT" | cut -f1)"
 echo
 echo "YEDEK HAZIR: $OUT  ($SZ)"
 echo "Baska cihaza/bilgisayara kopyalayin (USB, Drive, bulut...). Geri yukleme: zip icindeki geri_yukle.sh (OKU.txt'ye bakin)."
+echo "UYARI: bulutta 'baglantiya sahip herkes' paylasimi ACMAYIN; yedek kisisel ayarlarinizi icerir."
+[ "$TARAYICI" = "1" ] && echo "UYARI: --tarayici ile alindi: zip KAYITLI PAROLALARINIZI icerir. Sifreli bir ortamda saklayin."
