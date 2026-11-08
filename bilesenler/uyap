@@ -12,6 +12,7 @@
 #   uyap yazitipi        PDF'te birebir Times New Roman için Microsoft çekirdek yazı tiplerini kurar
 #   uyap kur-editor [ZIP] UYAP Editör'ü kurar/günceller (ZIP verilmezse uyap.gov.tr'den güncelini indirir)
 #   uyap guncelle        GitHub'daki son sürümü alır ve yeniden kurar
+#   uyap jdk14 [kur|dene|birak]  editörü JDK 14.0.2 ile çalıştır (glibc; resmî AdoptOpenJDK, SHA-256 doğrulamalı)
 #   uyap klavye [durum|q|f]  fiziksel klavye: Türkçe Q (ya da F) + Ctrl/Alt kısayolları (Termux:X11 açıkken)
 #   uyap gunluk          son günlük satırları     uyap tani   sorun giderme raporu (panoya kopyalar)
 #   uyap hakkinda        telif ve mühür doğrulaması
@@ -279,6 +280,12 @@ case "$komut" in
   yazitipi|yazitipleri) yazitipi ;;
   kur-editor) kur_editor "$@" ;;
   guncelle|güncelle) guncelle ;;
+  jdk14)
+    case "${1:-kur}" in
+      kur) shift; bash "$EIMZA/jdk14_kur.sh" kur "$@" ;;
+      dene|birak) bash "$EIMZA/jdk14_kur.sh" "$1" ;;
+      *) echo "uyap jdk14 [kur [--arsiv DOSYA]|dene|birak]"; exit 2 ;;
+    esac ;;
   klavye)
     case "${1:-ayarla}" in
       ayarla) DISPLAY="${DISPLAY:-:0}" bash "$EIMZA/klavye.sh" ;;

@@ -39,6 +39,12 @@
   yazma açık, yerel çözünürlük.
 - Ctrl+Shift+F11: odaktaki metnin seçim/imleç durumunu `~/.uyap-editor/tani-secim.txt`'ye yazar.
 
+- İmzalamada "Java sürümünüz imzalama için desteklenmemektedir": UYAP sürümü her imzalamada da denetliyor;
+  başlatıcı artık oturum boyunca 11 gösteriyor.
+- `uyap jdk14`: JDK 14.0.2'yi (glibc) Termux'ta çalıştırma; elle kurulmuş JDK'lar bulunur, `.bashrc`'yi bozan
+  PATH/LD_LIBRARY_PATH satırları temizlenir.
+- PREFIX tanımsızken (masaüstü Linux) başlatıcı kendini Termux'ta sanıyordu.
+
 ### Yeni
 - `uyap` komutu ve dialog menüsü; `uyap durum`, `uyap tani` (jetonları gizleyen rapor), `uyap yazitipi`,
   `uyap kur-editor`, `uyap gunluk`.

@@ -120,6 +120,25 @@ class KomutTesti(unittest.TestCase):
         self.assertFalse(any(x.startswith("--add-opens") for x in k))
 
 
+class GlibcTesti(unittest.TestCase):
+    def test_elf_yorumlayici(self):
+        import sys
+        self.assertIn("ld", ue.elf_yorumlayici(os.path.realpath(sys.executable)))
+        self.assertEqual(ue.elf_yorumlayici(os.path.join(KOK, "kur.sh")), "")
+
+    def test_bionic_java_ortami_degismez(self):
+        eski = ue.glibc_jdk
+        try:
+            ue.glibc_jdk = lambda j: ""
+            os.environ["LD_PRELOAD"] = "/x/libtermux-exec.so"
+            self.assertEqual(ue.java_ortami("/j21/bin/java").get("LD_PRELOAD"), "/x/libtermux-exec.so")
+            ue.glibc_jdk = lambda j: "glibc"
+            self.assertNotIn("LD_PRELOAD", ue.java_ortami("/jdk14/bin/java"))
+        finally:
+            ue.glibc_jdk = eski
+            os.environ.pop("LD_PRELOAD", None)
+
+
 class JavaSecimTesti(unittest.TestCase):
     def test_11_tercih_edilir(self):
         eski_a, eski_s = ue.jdk_adaylari, ue._jdk_surumu

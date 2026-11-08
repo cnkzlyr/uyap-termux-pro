@@ -145,7 +145,22 @@ Hepsi GitHub Actions'ta (`.github/workflows/test.yml`) çalışır. Mühürlü d
 * Bu sürümdeki değişiklikler x86_64 Linux'ta JDK 21 + Xvfb ve **gerçek UYAP Editör 5.4.19 jar'larıyla** sınandı;
   Termux (aarch64) üzerinde gerçek okuyucuyla tam akış ayrıca denenmelidir.
 * Koyu temada editörün kendi araç çubuğu simgelerinin bazıları soluk görünür (simgeler UYAP'a ait).
-* Java 14.0.2 Termux'ta (Android/bionic) yoktur; Termux'un openjdk-17/21'i kullanılır. Editör Java 8 için
-  yazıldığından Java 9+ modül kısıtlamaları başlatıcıda açılır (bkz. ue.py `MODUL_IZINLERI`).
+* Editör Java 8 için yazıldığından Java 9+ modül kısıtlamaları başlatıcıda açılır (bkz. ue.py `MODUL_IZINLERI`).
+
+## JDK 14.0.2 (isteğe bağlı)
+
+Varsayılan Termux'un openjdk-21'idir (başlatıcı editörün 6-14 sürüm kontrolünü açılışta ve imzalamada geçer).
+Editörü UYAP'ın desteklediği JDK 14.0.2 ile çalıştırmak için:
+
+```bash
+uyap jdk14            # glibc paketleri + resmî AdoptOpenJDK 14.0.2+12 aarch64 (SHA-256 doğrulamalı) + yama + deneme
+uyap jdk14 --arsiv /sdcard/Download/OpenJDK14U-jdk_aarch64_linux_hotspot_14.0.2_12.tar.gz   # çevrimdışı
+uyap jdk14 dene       # java -version + AWT/X11 denemesi
+uyap jdk14 birak      # tekrar Java 21
+```
+
+JDK ~200 MB olduğundan depoya konmaz (GitHub 100 MB sınırı); kurulum her zaman aynı resmî arşivi indirip özetini
+doğrular. Resmî Linux JDK'sı glibc ister: Termux glibc deposu kurulur, `bin/` dosyaları glibc bağlayıcısına yamanır
+ve başlatıcı onu Termux'un `LD_PRELOAD`'u olmadan çalıştırır (`grun` kullanılmaz: Java kendi klasörünü bulamaz).
 * Termux:X11'de dokunmatik "parmakla kaydırma" fare tekerleği gibi davranmaz; Termux:X11 ayarlarından
   "Touchpad" ya da iki parmakla kaydırma kullanın.

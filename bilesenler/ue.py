@@ -34,7 +34,7 @@ CKZ_KIMLIK = "[UYAP-Termux Pro] © 2026 Av. Can KIZILYAR — Tüm hakları sakl�
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 HOME = os.path.expanduser("~")
 PREFIX = os.environ.get("PREFIX", "/data/data/com.termux/files/usr")
-TERMUX = "com.termux" in PREFIX or os.path.isdir("/data/data/com.termux")
+TERMUX = "com.termux" in os.environ.get("PREFIX", "") or os.path.isdir("/data/data/com.termux")
 AYRINTI = os.environ.get("UYAP_AYRINTI") == "1"
 
 JARS_DIR = os.environ.get("UYAP_JARS") or os.path.join(BASE_DIR, "jars")
@@ -198,11 +198,68 @@ def ornege_yonlendir(dosyalar):
         return False
 
 
+# --------------------------------------------------------------------------- glibc JDK (ör. JDK 14.0.2)
+def elf_yorumlayici(yol):
+    """ELF dosyasının PT_INTERP (dinamik bağlayıcı) yolu; ELF değilse ya da okunamazsa ''.
+    patchelf yorumlayıcıyı genellikle dosyanın sonlarına taşır: başlıktaki ofsete gidilerek okunur."""
+    import struct
+    try:
+        with open(os.path.realpath(yol), "rb") as f:
+            b = f.read(64)
+            if len(b) < 64 or b[:4] != b"\x7fELF" or b[4] != 2:     # yalnızca 64 bit
+                return ""
+            end = "<" if b[5] == 1 else ">"
+            phoff, = struct.unpack_from(end + "Q", b, 0x20)
+            phentsize, phnum = struct.unpack_from(end + "HH", b, 0x36)
+            f.seek(phoff)
+            ph = f.read(phentsize * phnum)
+            for i in range(phnum):
+                o = i * phentsize
+                if o + 56 > len(ph):
+                    break
+                p_type, = struct.unpack_from(end + "I", ph, o)
+                if p_type == 3:                                      # PT_INTERP
+                    off, = struct.unpack_from(end + "Q", ph, o + 8)
+                    size, = struct.unpack_from(end + "Q", ph, o + 32)
+                    if size > 4096:
+                        return ""
+                    f.seek(off)
+                    return f.read(size).rstrip(b"\0").decode("utf-8", "ignore")
+    except (OSError, struct.error):
+        return ""
+    return ""
+
+
+def glibc_jdk(java):
+    """'glibc' = Termux glibc bağlayıcısına yamalı (çalışır), 'yamasiz' = /lib/ld-linux (Termux'ta çalışmaz), '' = bionic."""
+    yorum = elf_yorumlayici(java)
+    if "/glibc/" in yorum:
+        return "glibc"
+    if TERMUX and yorum.startswith("/lib"):
+        return "yamasiz"
+    return ""
+
+
+def java_ortami(java):
+    """glibc JDK'lar, Termux'un her sürece eklediği bionic LD_PRELOAD (termux-exec) ile çöker: temizlenir.
+    (grun kullanılmaz: Java'yı bağlayıcı üzerinden başlatınca JAVA_HOME'u bulamaz ve boşluklu argümanları böler.)"""
+    env = dict(os.environ)
+    if java and glibc_jdk(java):
+        env.pop("LD_PRELOAD", None)
+        env.pop("LD_LIBRARY_PATH", None)
+        fc = os.path.join(PREFIX, "etc", "fonts", "fonts.conf")
+        if os.path.isfile(fc):
+            env.setdefault("FONTCONFIG_FILE", fc)
+    return env
+
+
 # --------------------------------------------------------------------------- Java bulma
 def _jdk_surumu(java):
+    if glibc_jdk(java) == "yamasiz":
+        return 0
     try:
         out = subprocess.run([java, "-version"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                             timeout=30).stdout.decode("utf-8", "ignore")
+                             env=java_ortami(java), timeout=30).stdout.decode("utf-8", "ignore")
     except Exception:
         return 0
     import re
@@ -257,11 +314,21 @@ def java_bul(ayar_yolu=""):
 
 
 def javac_bul(java):
+    """Aynı JDK'nın javac'ı; çalıştırılamıyorsa (yamasız glibc) Termux'un kendi JDK'sının javac'ı.
+    Başlatıcı --release 11 ile derlendiği için hangi javac olduğu fark etmez."""
+    def calisir(p):
+        return os.path.isfile(p) and glibc_jdk(p) != "yamasiz"
     for ad in ("javac", "javac.default"):
         p = os.path.join(os.path.dirname(java), ad)
-        if os.path.isfile(p):
+        if calisir(p):
             return p
-    return shutil.which("javac")
+    for aday in jdk_adaylari():
+        if not glibc_jdk(aday):
+            p = os.path.join(os.path.dirname(aday), "javac")
+            if calisir(p):
+                return p
+    w = shutil.which("javac")
+    return w if w and calisir(w) else None
 
 
 # --------------------------------------------------------------------------- jar'lar
@@ -355,7 +422,7 @@ def baslaticiyi_derle(java, cp, eimza):
 
     def derle(dosyalar):
         r = subprocess.run([javac, "--release", "11", "-encoding", "UTF-8", "-nowarn", "-d", DERLEME_DIR, "-cp", cp] + dosyalar,
-                           stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                           stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=java_ortami(javac))
         if r.returncode != 0:
             uyari("Derleme hatası:\n" + r.stderr.decode("utf-8", "ignore")[-2000:])
         return r.returncode == 0
@@ -569,7 +636,9 @@ def tani(ayarlar):
         print("  [%s] %s" % (b, ", ".join("%s=%s" % kv for kv in ayarlar[b].items())))
     print("JDK adayları:")
     for a in jdk_adaylari():
-        print("  %-60s Java %s" % (a, _jdk_surumu(a)))
+        g = glibc_jdk(a)
+        ek = {"glibc": "  (glibc)", "yamasiz": "  (glibc, YAMASIZ: uyap jdk14 kur)"}.get(g, "")
+        print("  %-60s Java %s%s" % (a, _jdk_surumu(a), ek))
     java, s = java_bul(ayarlar["java"]["yol"].strip())
     print("Seçilen Java: %s (%s)" % (java, s))
     print("javac: %s" % (javac_bul(java) if java else "-"))
@@ -594,7 +663,7 @@ def kontrol_merkezi(ayarlar):
     if not hazir:
         return 4
     flatlaf = [j for j in jars if os.path.basename(j) == "flatlaf.jar"]
-    return subprocess.call([java, "-Xmx256M", "-XX:+UseSerialGC", "-Dawt.useSystemAAFontSettings=on", "-Dsun.java2d.uiScale=1",
+    return subprocess.call(env=java_ortami(java), args=[java, "-Xmx256M", "-XX:+UseSerialGC", "-Dawt.useSystemAAFontSettings=on", "-Dsun.java2d.uiScale=1",
                             "-cp", os.pathsep.join([DERLEME_DIR] + flatlaf), "uyaptermux.KontrolMerkezi"])
 
 
@@ -666,10 +735,11 @@ def main(argv):
     belge_klasoru(ayarlar)
     os.chdir(work_dir)
     komut = komut_olustur(java, java_surum, cp, ayarlar, hazir, eimza_hazir, dosyalar, work_dir)
-    bilgi("UYAP Editör başlatılıyor (Java %d%s) ..." % (java_surum, ", e-imza açık" if eimza_hazir else ""))
+    bilgi("UYAP Editör başlatılıyor (Java %d%s%s) ..." % (java_surum, " glibc" if glibc_jdk(java) else "",
+                                                          ", e-imza açık" if eimza_hazir else ""))
     ayrinti("Komut: " + " ".join(komut))
     try:
-        return subprocess.call(komut)
+        return subprocess.call(komut, env=java_ortami(java))
     except KeyboardInterrupt:
         return 130
 
