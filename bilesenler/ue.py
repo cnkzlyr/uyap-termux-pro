@@ -70,6 +70,12 @@ VARSAYILAN_AYARLAR = {
     "eimza": {
         "aktif": "evet",
     },
+    "klavye": {
+        "duzen": "tr",             # X11 klavye düzeni (setxkbmap): tr, us, de ...
+        "varyant": "",             # boş = Türkçe Q, f = Türkçe F
+        "tarama_kodlari": "evet",  # Termux:X11 "Prefer scancodes": Ctrl/Alt kısayolları + Türkçe düzen X'te
+        "alt_menu": "hayir",       # hayir: tek başına Alt, editörün kısayol harflerini (KeyTips) açmaz
+    },
     "belgeler": {
         "kayit_klasoru": "",       # boş = Termux'ta /sdcard/Documents/UYAP_Belgelerim
     },
@@ -491,6 +497,7 @@ def komut_olustur(java, java_surum, cp, ayarlar, hazir, eimza_hazir, dosyalar, w
             "-Duyap.kaydirma.sure=%s" % a["kaydirma"]["sure"],
             "-Duyap.hz=%s" % a["kaydirma"]["hz"],
             "-Duyap.java.taklit=%s" % str(evet(a["java"]["surum_taklidi"])).lower(),
+            "-Duyap.alt.menu=%s" % str(evet(a["klavye"]["alt_menu"])).lower(),
         ]
         if os.name != "nt" and os.environ.get("UYAP_TEK_ORNEK", "1") != "0":
             komut.append("-Duyap.instance.dir=%s" % DURUM_DIR)

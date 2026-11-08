@@ -116,7 +116,7 @@ ONAYSIZ="${ONAYSIZ:-0}"
 adim 3 "Depolar ve paketler (uzun sürebilir)"
 # openjdk-21: Adalet E-Imza (zorunlu) ve UYAP Editor (baslatici surum kontrolunu gecer). openjdk-11 (tur-repo)
 # varsa editor onu tercih eder; yoksa kurulum bu yuzden basarisiz sayilmaz.
-PAKETLER="python libusb termux-api openjdk-21 openjdk-21-x xorg-server-xvfb termux-x11-nightly dialog fontconfig-utils ttf-dejavu"
+PAKETLER="python libusb termux-api openjdk-21 openjdk-21-x xorg-server-xvfb termux-x11-nightly dialog fontconfig-utils ttf-dejavu xorg-setxkbmap xorg-xkbcomp"
 ISTEGE_BAGLI="openjdk-11"
 if [ "$HAFIF" = "1" ]; then PAKETLER="$PAKETLER fluxbox xterm"; else PAKETLER="$PAKETLER xfce4 xfce4-terminal thunar"; fi
 if [ "$PAKETATLA" != "1" ]; then

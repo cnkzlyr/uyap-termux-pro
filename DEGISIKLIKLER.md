@@ -22,6 +22,11 @@
 - `kur.sh`: find çıktısı üzerinde `for` (SC2044); git kopyasında yanıltıcı "sahte olabilir" mesajı.
 - `startxfce4_termux.sh`'deki komutsuz yönlendirme (SC2188) — betik `xfce_baslat.sh` ile değiştirildi.
 
+- Termux:X11'de Ctrl/Alt kısayolları ABD düzeninde tarama kodu olarak, harfler Android düzeninde metin olarak
+  gidiyordu (karışık davranış) → `klavye.sh`: "Prefer scancodes" + `setxkbmap tr`, masaüstü açılışında otomatik;
+  düzen gerçek tuş haritasından doğrulanır.
+- Tek başına Alt, şeritte KeyTips açıp sonraki tuşları yutuyordu → `TekAltEngeli` (Alt+harf, AltGr etkilenmez).
+
 ### Yeni
 - `uyap` komutu ve dialog menüsü; `uyap durum`, `uyap tani` (jetonları gizleyen rapor), `uyap yazitipi`,
   `uyap kur-editor`, `uyap gunluk`.

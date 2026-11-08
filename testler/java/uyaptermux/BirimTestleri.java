@@ -68,6 +68,25 @@ public final class BirimTestleri {
         esit(true, s.endsWith("[eimza]\naktif = hayir\n"), "yeni bolum");
         f.delete();
 
+        // Tek Alt engeli
+        java.lang.reflect.Constructor<TekAltEngeli> kc = TekAltEngeli.class.getDeclaredConstructor();
+        kc.setAccessible(true);
+        TekAltEngeli t = kc.newInstance();
+        int P = java.awt.event.KeyEvent.KEY_PRESSED, R = java.awt.event.KeyEvent.KEY_RELEASED;
+        int ALT = java.awt.event.KeyEvent.VK_ALT, SOL = java.awt.event.KeyEvent.KEY_LOCATION_LEFT;
+        int SAG = java.awt.event.KeyEvent.KEY_LOCATION_RIGHT, D = java.awt.event.KeyEvent.VK_D;
+        esit(true, t.isle(P, ALT, SOL, false), "tek Alt basilisi yutulur");
+        esit(true, t.isle(R, ALT, SOL, false), "tek Alt birakilisi yutulur");
+        t.isle(P, ALT, SOL, false);
+        esit(false, t.isle(P, D, 1, false), "Alt+D: D gecer");
+        esit(false, t.isle(R, D, 1, false), "Alt+D: D birakilisi gecer");
+        t.isle(R, ALT, SOL, false);
+        esit(false, t.isle(P, ALT, SAG, false), "sag Alt (AltGr) gecer");
+        esit(false, t.isle(R, ALT, SAG, false), "sag Alt birakilisi gecer");
+        esit(false, t.isle(P, java.awt.event.KeyEvent.VK_ALT_GRAPH, 1, false), "VK_ALT_GRAPH gecer");
+        esit(false, t.isle(P, ALT, SOL, true), "Ctrl+Alt gecer");
+        esit(false, t.isle(P, java.awt.event.KeyEvent.VK_A, 1, false), "normal harf gecer");
+
         System.out.println(hata == 0 ? "HEPSI GECTI" : hata + " TEST BASARISIZ");
         System.exit(hata == 0 ? 0 : 1);
     }

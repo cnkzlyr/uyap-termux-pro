@@ -13,6 +13,12 @@ sleep 3
 am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity >/dev/null 2>&1
 sleep 1
 export DISPLAY=:0
+# Klavye: Termux:X11 tarama kodu modu + Turkce Q duzeni (Ctrl/Alt kisayollari, AltGr). Oturum ayarlarini
+# ezebilecegi icin XFCE basladiktan sonra bir kez daha uygulanir. Kapatmak: UYAP_KLAVYE=0
+if [ "${UYAP_KLAVYE:-1}" != "0" ] && [ -f "$DIR/klavye.sh" ]; then
+  bash "$DIR/klavye.sh" xfce-xml >/dev/null 2>&1
+  ( sleep 6; bash "$DIR/klavye.sh" >> "${EIMZA_DIR:-$HOME/.eimza}/klavye.log" 2>&1 ) &
+fi
 if [ "${MASAUSTU:-xfce}" = "fluxbox" ]; then
   exec fluxbox
 else

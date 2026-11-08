@@ -27,6 +27,8 @@ import javax.swing.UIManager;
  *   uyap.hz        hedef kare hizi (varsayilan: ekranin yenileme hizi, en az 60)
  *   uyap.java.taklit  true: JDK 15+ uzerinde UYAP'in "Java 6-14 arasi olmali" kontrolunu acilis
  *                  sirasinda gecer (jar degistirilmez; ilk pencere acilinca gercek surum geri yazilir)
+ *   uyap.alt.menu  false (varsayilan): tek basina basilip birakilan Alt, editorun kisayol harflerini (KeyTips)
+ *                  ve menu odagini ACMAZ; Alt+harf kombinasyonlari ve AltGr (Turkce @, €, ...) etkilenmez
  *   uyap.instance.dir  tek-ornek servisinin durum klasoru (bos = kapali)
  *   eimza.dir      Termux USB CCID koprusunun durum klasoru (bos = e-imza saglayicisi yuklenmez)
  *
@@ -47,6 +49,7 @@ public final class Baslatici {
             AkiciKaydirma.kur();
         }
         kisayollar();
+        if (!Boolean.parseBoolean(System.getProperty("uyap.alt.menu", "false"))) TekAltEngeli.kur();
         PdfYaziTipi.baslat();
         if (gercekSurum != null) gercekSurumuGeriYaz(gercekSurum);
 

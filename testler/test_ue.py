@@ -96,6 +96,7 @@ class KomutTesti(unittest.TestCase):
         self.assertFalse(any(x.startswith("-Dflatlaf.uiScale") for x in k), "cift olcekleme")
         self.assertFalse(any("d3d" in x for x in k))
         self.assertTrue(any(x.startswith("-Deimza.dir=") for x in k))
+        self.assertIn("-Duyap.alt.menu=false", k)
 
     def test_duz_modda_usf_sablon_acilir(self):
         k = ue.komut_olustur("java", 11, "cp", self.a, False, False, ["/x/A.USF"], "/w")

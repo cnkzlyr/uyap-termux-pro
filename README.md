@@ -70,6 +70,18 @@ Editörde: **F9** akıcı kaydırmayı aç/kapa · **Ctrl+Shift+F12** UYAP-Termu
 **E-imza ile portal girişi:** okuyucuyu takın → "İzin ver" → `uyap durum`'da okuyucu ve Adalet E-İmza yeşil →
 telefonun Chrome'unda portala e-imza ile girin ("yerel ağ" izni sorulursa verin). PIN Android penceresinde sorulur.
 
+## Fiziksel klavye (Galaxy Tab Book Cover Keyboard vb.)
+
+`uyap masaustu` her açılışta klavyeyi bilgisayar gibi ayarlar (`uyap klavye` ile elle de çalışır):
+Termux:X11'de **"Prefer scancodes"** açılır ve X düzeni **Türkçe Q** yapılır. Böylece Ctrl+A/C/V/X/Z/S, Alt+Tab,
+AltGr+Q = @, AltGr+E = € ve ğ ü ş ı ö ç doğrudan çalışır. Türkçe F için: `uyap klavye f`. Durum: `uyap klavye durum`.
+
+Editörde **tek başına Alt'a basmak** artık şeritte kısayol harflerini açmaz (yanlışlıkla Alt'a basınca yazı
+bölünmez). Eski davranış için `ayarlar.ini` → `[klavye] alt_menu = evet`.
+
+Android tarafında (bir kez): Ayarlar → Genel yönetim → Fiziksel klavye → Türkçe Q. Samsung'un yakaladığı
+kısayollar (Alt+Tab, Ctrl+Boşluk) için Termux:X11 → Ayarlar → Klavye → "Enable Accessibility service".
+
 ## Ayarlar
 
 `~/.config/uyap-termux/ayarlar.ini` (ilk açılışta oluşur; `uyap ayarlar` ya da Kontrol Merkezi ile düzenlenir):

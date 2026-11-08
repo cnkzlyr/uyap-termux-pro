@@ -12,6 +12,7 @@
 #   uyap yazitipi        PDF'te birebir Times New Roman için Microsoft çekirdek yazı tiplerini kurar
 #   uyap kur-editor [ZIP] UYAP Editör'ü kurar/günceller (ZIP verilmezse uyap.gov.tr'den güncelini indirir)
 #   uyap guncelle        GitHub'daki son sürümü alır ve yeniden kurar
+#   uyap klavye [durum|q|f]  fiziksel klavye: Türkçe Q (ya da F) + Ctrl/Alt kısayolları (Termux:X11 açıkken)
 #   uyap gunluk          son günlük satırları     uyap tani   sorun giderme raporu (panoya kopyalar)
 #   uyap hakkinda        telif ve mühür doğrulaması
 set -u
@@ -117,6 +118,8 @@ ayarlar() {
       akici "Akıcı kaydırma: $(ayar_al kaydirma akici)" \
       bellek "Java belleği (MB): $(ayar_al java bellek)" \
       eimza "E-imza: $(ayar_al eimza aktif)" \
+      altmenu "Tek Alt ile kısayol harfleri: $(ayar_al klavye alt_menu)" \
+      klavye "Klavye düzeni: $(ayar_al klavye duzen) $(ayar_al klavye varyant)" \
       dosya "Ayar dosyasını düzenleyiciyle aç") || break
     case "$secim" in
       tema) v=$(dialog --stdout --radiolist "Tema" 14 50 5 acik "Açık (IntelliJ)" on koyu "Koyu (Darcula)" off \
@@ -128,6 +131,10 @@ ayarlar() {
       akici) v=$(dialog --stdout --radiolist "Akıcı kaydırma (editörde F9 ile de değişir)" 10 50 2 evet "" on hayir "" off) && ayar_yaz kaydirma akici "$v" ;;
       bellek) v=$(dialog --stdout --inputbox "Java en çok bellek (MB) ya da 'otomatik'" 9 50 "$(ayar_al java bellek)") && ayar_yaz java bellek "$v" ;;
       eimza) v=$(dialog --stdout --radiolist "Editörde e-imza (USB köprüsü)" 10 50 2 evet "" on hayir "" off) && ayar_yaz eimza aktif "$v" ;;
+      altmenu) v=$(dialog --stdout --radiolist "Tek başına Alt'a basınca şeritte kısayol harfleri açılsın mı? (hayir önerilir: yanlışlıkla Alt'a basınca yazı bölünmez)" 11 64 2 hayir "" on evet "" off) && ayar_yaz klavye alt_menu "$v" ;;
+      klavye) v=$(dialog --stdout --radiolist "Fiziksel klavye düzeni" 11 50 3 q "Türkçe Q" on f "Türkçe F" off us "İngilizce (ABD)" off) && {
+                case "$v" in q) ayar_yaz klavye duzen tr; ayar_yaz klavye varyant "" ;; f) ayar_yaz klavye duzen tr; ayar_yaz klavye varyant f ;; us) ayar_yaz klavye duzen us; ayar_yaz klavye varyant "" ;; esac
+                DISPLAY="${DISPLAY:-:0}" bash "$EIMZA/klavye.sh" >/dev/null 2>&1; } ;;
       dosya) "${EDITOR:-nano}" "$AYAR" ;;
     esac
   done
@@ -272,6 +279,14 @@ case "$komut" in
   yazitipi|yazitipleri) yazitipi ;;
   kur-editor) kur_editor "$@" ;;
   guncelle|güncelle) guncelle ;;
+  klavye)
+    case "${1:-ayarla}" in
+      ayarla) DISPLAY="${DISPLAY:-:0}" bash "$EIMZA/klavye.sh" ;;
+      durum) DISPLAY="${DISPLAY:-:0}" bash "$EIMZA/klavye.sh" durum ;;
+      f|F) ayar_yaz klavye varyant f; DISPLAY="${DISPLAY:-:0}" bash "$EIMZA/klavye.sh" ;;
+      q|Q) ayar_yaz klavye varyant ""; DISPLAY="${DISPLAY:-:0}" bash "$EIMZA/klavye.sh" ;;
+      *) echo "uyap klavye [ayarla|durum|q|f]"; exit 2 ;;
+    esac ;;
   gunluk|günlük) gunluk ;;
   tani|tanı) tani ;;
   hakkinda|hakkında) exec "$HOME/.local/bin/uyap-hakkinda" ;;
