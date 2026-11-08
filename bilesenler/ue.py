@@ -66,6 +66,7 @@ VARSAYILAN_AYARLAR = {
         "yol": "",                 # boş = otomatik (11 > 17 > 21)
         "bellek": "otomatik",      # MB ya da otomatik (RAM'in ~%40'ı, 768-4096 arası)
         "surum_taklidi": "evet",   # JDK 15+ ile editörün "6-14 arası" kontrolünü açılışta geçer
+        "ek_parametreler": "",     # ek JVM parametreleri, ör. -Dsun.java2d.xrender=false
     },
     "eimza": {
         "aktif": "evet",
@@ -75,6 +76,7 @@ VARSAYILAN_AYARLAR = {
         "varyant": "",             # boş = Türkçe Q, f = Türkçe F
         "tarama_kodlari": "evet",  # Termux:X11 "Prefer scancodes": Ctrl/Alt kısayolları + Türkçe düzen X'te
         "alt_menu": "hayir",       # hayir: tek başına Alt, editörün kısayol harflerini (KeyTips) açmaz
+        "dokunma": "dokunmatik",   # dokunmatik (dokunulan yere tıklar, sürükleyip seçer) | touchpad | dogrudan
     },
     "belgeler": {
         "kayit_klasoru": "",       # boş = Termux'ta /sdcard/Documents/UYAP_Belgelerim
@@ -457,6 +459,34 @@ def belge_klasoru(ayarlar):
     return k
 
 
+# --------------------------------------------------------------------------- ölçek
+def xft_dpi():
+    """X sunucusunun Xft.dpi değeri (xrdb), yoksa None."""
+    try:
+        out = subprocess.run(["xrdb", "-query"], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, timeout=5).stdout.decode()
+        for satir in out.splitlines():
+            if satir.startswith("Xft.dpi:"):
+                return float(satir.split(":", 1)[1])
+    except Exception:
+        pass
+    return None
+
+
+def olcek_degeri(ayar, dpi=None):
+    """Tüm pencerenin ölçeği (sun.java2d.uiScale). 'otomatik' = Xft.dpi/96, 0.25'lik adımlarla, 1.0-3.0."""
+    a = str(ayar).strip().lower().replace(",", ".")
+    if a and a != "otomatik":
+        try:
+            return "%g" % max(0.75, min(3.0, float(a)))
+        except ValueError:
+            pass
+    if dpi is None:
+        dpi = xft_dpi()
+    if not dpi:
+        return "1"
+    return "%g" % max(1.0, min(3.0, round(dpi / 96.0 * 4) / 4.0))
+
+
 # --------------------------------------------------------------------------- komut
 def komut_olustur(java, java_surum, cp, ayarlar, hazir, eimza_hazir, dosyalar, work_dir):
     a = ayarlar
@@ -468,24 +498,16 @@ def komut_olustur(java, java_surum, cp, ayarlar, hazir, eimza_hazir, dosyalar, w
         "-Xmx%dM" % bellek_mb(a["java"]["bellek"]),
         "-XX:+UseSerialGC" if TERMUX else "-XX:+UseG1GC",
         "-Dfile.encoding=UTF-8",
-        "-Dsun.java2d.uiScale=1",
+        "-Dsun.java2d.uiScale=%s" % olcek_degeri(a["arayuz"]["olcek"]),
         "-Dawt.useSystemAAFontSettings=on",
         "-Dswing.aatext=true",
         "-Dswing.volatileImageBufferEnabled=true",
     ]
     if java_surum >= 9:
-        komut += [
-            "--add-opens=java.base/java.util=ALL-UNNAMED",
-            "--add-opens=java.base/java.lang=ALL-UNNAMED",
-            "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
-            "--add-opens=java.base/java.text=ALL-UNNAMED",
-            "--add-opens=java.base/java.io=ALL-UNNAMED",
-            "--add-opens=java.desktop/java.awt=ALL-UNNAMED",
-            "--add-opens=java.desktop/java.awt.font=ALL-UNNAMED",
-            "--add-opens=java.desktop/javax.swing=ALL-UNNAMED",
-            "--add-opens=java.desktop/sun.awt.X11=ALL-UNNAMED",
-            "--add-exports=jdk.crypto.cryptoki/sun.security.pkcs11.wrapper=ALL-UNNAMED",
-        ]
+        komut += java_modul_izinleri()
+    # Ek JVM parametreleri: ayarlar.ini [java] ek_parametreler ya da UYAP_JAVA_OPTS (boşlukla ayrılmış)
+    import shlex
+    komut += shlex.split(a["java"].get("ek_parametreler", "")) + shlex.split(os.environ.get("UYAP_JAVA_OPTS", ""))
     if hazir:
         komut += [
             "-Duyap.tema=%s" % a["arayuz"]["tema"],
@@ -511,6 +533,26 @@ def komut_olustur(java, java_surum, cp, ayarlar, hazir, eimza_hazir, dosyalar, w
         else:
             komut.append("EDITOR_TYPE_DOCUMENT")
     return komut
+
+
+# UYAP Java 8 için yazılmış; Java 9+ modül sistemi dahili sınıflara erişimi engeller. Editör jar'larında başvurulan
+# dahili paketler (jar taramasıyla bulundu). Eksik izin → örn. seçili metin hiç çizilmiyordu:
+# "IllegalAccessError: ... cannot access class sun.swing.SwingUtilities2 ... does not export sun.swing".
+MODUL_IZINLERI = {
+    "java.base": ["java.util", "java.lang", "java.lang.reflect", "java.text", "java.io", "java.net",
+                  "sun.security.util", "sun.security.x509", "sun.security.action", "sun.security.provider",
+                  "sun.reflect.generics.reflectiveObjects"],
+    "java.desktop": ["java.awt", "java.awt.font", "java.awt.image", "java.awt.event", "javax.swing",
+                     "javax.swing.text", "javax.swing.plaf.basic", "sun.swing", "sun.awt", "sun.awt.X11",
+                     "sun.awt.image", "sun.awt.datatransfer", "sun.awt.dnd", "sun.awt.im", "sun.font",
+                     "sun.java2d", "sun.java2d.loops", "sun.java2d.pipe", "sun.java2d.opengl", "sun.print",
+                     "com.sun.java.swing.plaf.gtk"],
+    "jdk.crypto.cryptoki": ["sun.security.pkcs11.wrapper"],
+}
+
+
+def java_modul_izinleri():
+    return ["--add-opens=%s/%s=ALL-UNNAMED" % (m, p) for m, ps in MODUL_IZINLERI.items() for p in ps]
 
 
 def tani(ayarlar):

@@ -27,6 +27,18 @@
   düzen gerçek tuş haritasından doğrulanır.
 - Tek başına Alt, şeritte KeyTips açıp sonraki tuşları yutuyordu → `TekAltEngeli` (Alt+harf, AltGr etkilenmez).
 
+- **Seçili metin görünmüyordu** (Ctrl+A ya da fareyle seçim yapılıyor ama mavi vurgu yoktu): UYAP seçili metni
+  çizerken `sun.swing.SwingUtilities2`'yi kullanıyor; Java 9+ bunu engelleyince her boyamada `IllegalAccessError`
+  atılıyordu. Editör jar'larında başvurulan tüm JDK iç paketleri (sun.swing, sun.font, sun.java2d, sun.awt,
+  sun.print, sun.security.* …) `--add-opens` ile açıldı.
+- Ölçek yalnızca FlatLaf bileşenlerine uygulanıyordu (1.25 üstünde şerit kırpılıyordu) → tüm pencere
+  `sun.java2d.uiScale` ile ölçeklenir.
+- Dosya aç/kaydet pencereleri: Türkçe etiketler, hızlı erişim (İndirilenler, UYAP Belgelerim, Belgeler, Masaüstü),
+  ayrıntılı görünüm, ekrana göre büyük ve yeniden boyutlanabilir pencere.
+- Termux:X11 dokunmatik modu (dokunulan yere tıklama, sürükleyerek seçme), ekran klavyesi önerileri/kaydırarak
+  yazma açık, yerel çözünürlük.
+- Ctrl+Shift+F11: odaktaki metnin seçim/imleç durumunu `~/.uyap-editor/tani-secim.txt`'ye yazar.
+
 ### Yeni
 - `uyap` komutu ve dialog menüsü; `uyap durum`, `uyap tani` (jetonları gizleyen rapor), `uyap yazitipi`,
   `uyap kur-editor`, `uyap gunluk`.

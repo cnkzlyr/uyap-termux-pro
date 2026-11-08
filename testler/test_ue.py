@@ -82,6 +82,17 @@ class KomutTesti(unittest.TestCase):
     def setUp(self):
         self.a = ue.ayarlari_yukle(os.path.join(tempfile.mkdtemp(), "a.ini"))
 
+    def test_olcek(self):
+        self.assertEqual(ue.olcek_degeri("1,5"), "1.5")
+        self.assertEqual(ue.olcek_degeri("9"), "3")
+        self.assertEqual(ue.olcek_degeri("otomatik", dpi=144), "1.5")
+        self.assertEqual(ue.olcek_degeri("otomatik", dpi=72), "1")
+
+    def test_modul_izinleri(self):
+        k = ue.komut_olustur("java", 21, "cp", self.a, True, False, [], "/w")
+        self.assertIn("--add-opens=java.desktop/sun.swing=ALL-UNNAMED", k)   # seçim vurgusu
+        self.assertIn("--add-opens=jdk.crypto.cryptoki/sun.security.pkcs11.wrapper=ALL-UNNAMED", k)
+
     def test_bellek(self):
         self.assertEqual(ue.bellek_mb("2048"), 2048)
         self.assertEqual(ue.bellek_mb("100"), 256)
@@ -92,7 +103,7 @@ class KomutTesti(unittest.TestCase):
         k = ue.komut_olustur("java", 21, "cp", self.a, True, True, ["/x/a.usf"], "/w")
         self.assertIn("uyaptermux.Baslatici", k)
         self.assertEqual(k[-1], "/x/a.usf")
-        self.assertIn("-Dsun.java2d.uiScale=1", k)
+        self.assertIn("-Dsun.java2d.uiScale=1.2", k)
         self.assertFalse(any(x.startswith("-Dflatlaf.uiScale") for x in k), "cift olcekleme")
         self.assertFalse(any("d3d" in x for x in k))
         self.assertTrue(any(x.startswith("-Deimza.dir=") for x in k))

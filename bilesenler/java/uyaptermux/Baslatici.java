@@ -20,8 +20,8 @@ import javax.swing.UIManager;
  * Ayarlar -D ile gelir (ue.py ~/.config/uyap-termux/ayarlar.ini'den okur):
  *   uyap.tema      acik | koyu | macos-acik | macos-koyu | sistem
  *   uyap.vurgu     #RRGGBB (FlatLaf vurgu rengi; bos = temanin kendi rengi)
- *   uyap.olcek     1.0 - 3.0 ya da "otomatik" (ekran DPI'sina gore). Yalnizca FlatLaf olcegi kullanilir;
- *                  sun.java2d.uiScale=1 tutulur (ikisi birden verilirse cift olcekleme olur).
+ *   olcek          ue.py tum pencereyi sun.java2d.uiScale ile olcekler (serit, belge ve menuler birlikte; serit
+ *                  kirpilmaz). FlatLaf kendi olcegini EKLEMEZ (cift olcekleme olmasin diye flatlaf.uiScale=1).
  *   uyap.dokunmatik true: kalin kaydirma cubuklari, daha genis tiklama alanlari
  *   uyap.kaydirma  true/false (akici kaydirma; calisirken F9 ile ac/kapa)
  *   uyap.hz        hedef kare hizi (varsayilan: ekranin yenileme hizi, en az 60)
@@ -49,6 +49,8 @@ public final class Baslatici {
             AkiciKaydirma.kur();
         }
         kisayollar();
+        if (Boolean.parseBoolean(System.getProperty("uyap.dosya.modern", "true"))) DosyaSecici.kur();
+        else DosyaSecici.turkceMetinler();
         if (!Boolean.parseBoolean(System.getProperty("uyap.alt.menu", "false"))) TekAltEngeli.kur();
         PdfYaziTipi.baslat();
         if (gercekSurum != null) gercekSurumuGeriYaz(gercekSurum);
@@ -183,9 +185,8 @@ public final class Baslatici {
         boolean dokunmatik = Boolean.parseBoolean(System.getProperty("uyap.dokunmatik", "false"));
         int dpi = 0;
         try { dpi = Toolkit.getDefaultToolkit().getScreenResolution(); } catch (Throwable ignored) { }
-        double olcek = olcekHesapla(System.getProperty("uyap.olcek", "1.2"), dpi);
-        if (System.getProperty("flatlaf.uiScale") == null) System.setProperty("flatlaf.uiScale", String.valueOf(olcek));
-        System.out.println("[UYAP] tema=" + tema + " olcek=" + olcek + " (ekran " + dpi + " dpi)"
+        if (System.getProperty("flatlaf.uiScale") == null) System.setProperty("flatlaf.uiScale", "1");
+        System.out.println("[UYAP] tema=" + tema + " olcek=" + System.getProperty("sun.java2d.uiScale", "1") + " (ekran " + dpi + " dpi)"
                 + (dokunmatik ? " dokunmatik" : ""));
         if (laf == null) {
             try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (Exception ignored) { }
@@ -210,6 +211,8 @@ public final class Baslatici {
             UIManager.put("ScrollBar.width", dokunmatik ? 22 : 14);
             UIManager.put("TabbedPane.showTabSeparators", true);
             UIManager.put("Component.focusWidth", 1);
+            UIManager.put("Table.showVerticalLines", false);
+            UIManager.put("FileChooser.useSystemExtensionHiding", false);
             if (dokunmatik) {
                 UIManager.put("Button.margin", new java.awt.Insets(6, 14, 6, 14));
                 UIManager.put("Menu.margin", new java.awt.Insets(6, 8, 6, 8));
@@ -233,6 +236,9 @@ public final class Baslatici {
                 boolean acik = AkiciKaydirma.degistir();
                 System.out.println("[UYAP] akici kaydirma " + (acik ? "ACIK" : "KAPALI"));
                 k.consume();
+            } else if (k.getKeyCode() == KeyEvent.VK_F11 && k.isControlDown() && k.isShiftDown()) {
+                k.consume();
+                Tani.yaz();
             } else if (k.getKeyCode() == KeyEvent.VK_F12 && k.isControlDown() && k.isShiftDown()) {
                 k.consume();
                 SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null,

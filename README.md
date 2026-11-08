@@ -79,6 +79,11 @@ AltGr+Q = @, AltGr+E = € ve ğ ü ş ı ö ç doğrudan çalışır. Türkçe 
 Editörde **tek başına Alt'a basmak** artık şeritte kısayol harflerini açmaz (yanlışlıkla Alt'a basınca yazı
 bölünmez). Eski davranış için `ayarlar.ini` → `[klavye] alt_menu = evet`.
 
+**Dokunmatik ekran:** Termux:X11 "Simulated touchscreen" moduna alınır: dokunduğunuz yere tıklar, sürükleyerek
+metin seçer/taşır, uzun basma sağ tıktır. Ekran klavyesinde kaydırarak yazma ve öneriler açık kalır. Fare ya da
+dokunmatik yüzey bağlarsanız bilgisayardaki gibi çalışır. Dizüstü touchpad davranışı için
+`ayarlar.ini` → `[klavye] dokunma = touchpad`.
+
 Android tarafında (bir kez): Ayarlar → Genel yönetim → Fiziksel klavye → Türkçe Q. Samsung'un yakaladığı
 kısayollar (Alt+Tab, Ctrl+Boşluk) için Termux:X11 → Ayarlar → Klavye → "Enable Accessibility service".
 
@@ -89,7 +94,7 @@ kısayollar (Alt+Tab, Ctrl+Boşluk) için Termux:X11 → Ayarlar → Klavye → 
 ```ini
 [arayuz]
 tema = acik          ; acik | koyu | macos-acik | macos-koyu | sistem
-olcek = 1.2          ; 1.0–3.0 ya da otomatik. Editörün şerit menüsü 1.25'ten büyükte alttan kırpılabilir
+olcek = 1.2          ; 1.0–3.0 ya da otomatik. Tüm pencere ölçeklenir (şerit + belge); Tab S10+ için 1.75–2
 vurgu =              ; #RRGGBB
 dokunmatik = hayir   ; evet: kalın kaydırma çubuğu, geniş menüler
 [kaydirma]
@@ -140,5 +145,7 @@ Hepsi GitHub Actions'ta (`.github/workflows/test.yml`) çalışır. Mühürlü d
 * Bu sürümdeki değişiklikler x86_64 Linux'ta JDK 21 + Xvfb ve **gerçek UYAP Editör 5.4.19 jar'larıyla** sınandı;
   Termux (aarch64) üzerinde gerçek okuyucuyla tam akış ayrıca denenmelidir.
 * Koyu temada editörün kendi araç çubuğu simgelerinin bazıları soluk görünür (simgeler UYAP'a ait).
+* Java 14.0.2 Termux'ta (Android/bionic) yoktur; Termux'un openjdk-17/21'i kullanılır. Editör Java 8 için
+  yazıldığından Java 9+ modül kısıtlamaları başlatıcıda açılır (bkz. ue.py `MODUL_IZINLERI`).
 * Termux:X11'de dokunmatik "parmakla kaydırma" fare tekerleği gibi davranmaz; Termux:X11 ayarlarından
   "Touchpad" ya da iki parmakla kaydırma kullanın.

@@ -12,7 +12,13 @@
 #   bash klavye.sh tercih     yalnizca Termux:X11 tercihleri (uygulama on planda/arka planda acik olmali)
 #   bash klavye.sh xfce-xml   XFCE oturumu baslamadan once klavye duzeni ayar dosyasini yazar
 #   bash klavye.sh durum
-# Ayarlar: ~/.config/uyap-termux/ayarlar.ini  [klavye] duzen=tr  varyant=(bos=Q, f=F)  tarama_kodlari=evet
+# Dokunmatik ekran (Termux:X11 "Touchscreen input mode"):
+#   dokunmatik (varsayilan) = parmagin altina tiklar; surukleyerek metin secer/tasir; uzun basma = sag tik
+#   touchpad = dizustu dokunmatik yuzeyi gibi (imleci parmakla kaydirirsiniz)    dogrudan = ham dokunma olaylari
+# Ekran klavyesi: kaydirarak yazma ve yazma onerileri acik kalir (enforceCharBasedInput=false).
+# Fare/dokunmatik yuzey baglaninca bunlar bu ayardan etkilenmez: bilgisayardaki gibi calisir.
+# Ayarlar: ~/.config/uyap-termux/ayarlar.ini
+#   [klavye] duzen=tr  varyant=(bos=Q, f=F)  tarama_kodlari=evet  dokunma=dokunmatik|touchpad|dogrudan
 set -u
 AYAR="${XDG_CONFIG_HOME:-$HOME/.config}/uyap-termux/ayarlar.ini"
 export DISPLAY="${DISPLAY:-:0}"
@@ -28,6 +34,8 @@ DUZEN="$(ayar duzen tr)"; [ -n "$DUZEN" ] || DUZEN="tr"
 VARYANT="$(ayar varyant '')"
 TARAMA="$(ayar tarama_kodlari evet)"
 case "$TARAMA" in evet|e|true|1|acik) TARAMA=true ;; *) TARAMA=false ;; esac
+DOKUNMA="$(ayar dokunma dokunmatik)"
+case "$DOKUNMA" in touchpad|trackpad) DOKUNMA_KOD=1 ;; dogrudan|direct) DOKUNMA_KOD=3 ;; *) DOKUNMA="dokunmatik"; DOKUNMA_KOD=2 ;; esac
 
 tercih() {
   if ! command -v termux-x11-preference >/dev/null 2>&1; then
@@ -35,8 +43,9 @@ tercih() {
   fi
   # Uygulama acik degilse arac sonsuza dek bekler: zaman asimi sart
   if timeout 15 termux-x11-preference "preferScancodes"="$TARAMA" "hardwareKbdScancodesWorkaround"="true" \
-        "dexMetaKeyCapture"="true" >/dev/null 2>&1; then
-    echo "Termux:X11: tarama kodlari=$TARAMA, sistem kisayollarini yakala=acik"
+        "dexMetaKeyCapture"="true" "touchMode"="$DOKUNMA_KOD" "enforceCharBasedInput"="false" \
+        "displayResolutionMode"="native" >/dev/null 2>&1; then
+    echo "Termux:X11: tarama kodlari=$TARAMA, dokunma=$DOKUNMA, oneriler/kaydirarak yazma=acik, cozunurluk=yerel"
   else
     echo "Termux:X11 tercihleri yazilamadi (uygulama acik mi?). Elle: Termux:X11 > Ayarlar > Klavye > 'Prefer scancodes when possible'"
     return 1
@@ -94,10 +103,10 @@ duzen_dogru() {
 }
 
 durum() {
-  echo "ayar: duzen=$DUZEN varyant=${VARYANT:-Q} tarama_kodlari=$TARAMA"
+  echo "ayar: duzen=$DUZEN varyant=${VARYANT:-Q} tarama_kodlari=$TARAMA dokunma=$DOKUNMA"
   command -v setxkbmap >/dev/null 2>&1 && setxkbmap -query 2>/dev/null | sed 's/^/  X: /'
   command -v termux-x11-preference >/dev/null 2>&1 && timeout 10 termux-x11-preference list 2>/dev/null \
-    | grep -E '"(preferScancodes|hardwareKbdScancodesWorkaround|dexMetaKeyCapture)"' | sed 's/^/  Termux:X11: /'
+    | grep -E '"(preferScancodes|hardwareKbdScancodesWorkaround|dexMetaKeyCapture|touchMode|enforceCharBasedInput|displayResolutionMode)"' | sed 's/^/  Termux:X11: /'
 }
 
 case "${1:-hepsi}" in
